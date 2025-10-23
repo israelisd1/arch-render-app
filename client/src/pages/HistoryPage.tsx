@@ -5,6 +5,7 @@ import { APP_LOGO, APP_TITLE, getLoginUrl } from "@/const";
 import { trpc } from "@/lib/trpc";
 import { Link } from "wouter";
 import { Loader2, Sparkles } from "lucide-react";
+import Header from "@/components/Header";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -90,28 +91,7 @@ export default function HistoryPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
-      {/* Header */}
-      <header className="border-b border-white/10 bg-black/20 backdrop-blur-sm">
-        <div className="container mx-auto flex items-center justify-between py-4">
-          <Link href="/">
-            <div className="flex items-center gap-3 cursor-pointer">
-              {APP_LOGO && <img src={APP_LOGO} alt={APP_TITLE} className="h-8 w-8" />}
-              <h1 className="text-xl font-bold text-white">{APP_TITLE}</h1>
-            </div>
-          </Link>
-          <div className="flex items-center gap-4">
-            <span className="text-sm text-gray-300">Olá, {user?.name}</span>
-            <Link href="/render">
-              <Button variant="ghost" className="text-white hover:bg-white/10">
-                Nova Renderização
-              </Button>
-            </Link>
-            <Button variant="ghost" onClick={logout} className="text-white hover:bg-white/10">
-              Sair
-            </Button>
-          </div>
-        </div>
-      </header>
+      <Header />
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-12">

@@ -1,6 +1,6 @@
 import { desc, eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertRender, InsertUser, renders, users } from "../drizzle/schema";
+import { InsertRender, InsertUser, renders, tokenPackages, tokenTransactions, users } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -139,3 +139,94 @@ export async function getRenderById(id: number) {
   const result = await db.select().from(renders).where(eq(renders.id, id)).limit(1);
   return result.length > 0 ? result[0] : undefined;
 }
+
+
+/**
+ * Busca todos os pacotes de tokens ativos
+ */
+export async function getActiveTokenPackages() {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  return await db.select().from(tokenPackages).where(eq(tokenPackages.isActive, 1)).orderBy(tokenPackages.displayOrder);
+}
+
+/**
+ * Deduz tokens do saldo do usuário e registra transação
+ */
+export async function deductTokens(userId: number, amount: number, renderId?: number, description?: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  // Buscar saldo atual
+  const user = await db.select().from(users).where(eq(users.id, userId)).limit(1);
+  if (!user || user.length === 0) throw new Error("User not found");
+
+  const balanceBefore = user[0].tokenBalance;
+  const balanceAfter = balanceBefore - amount;
+
+  if (balanceAfter < 0) {
+    throw new Error("Insufficient token balance");
+  }
+
+  // Atualizar saldo
+  await db.update(users).set({ tokenBalance: balanceAfter }).where(eq(users.id, userId));
+
+  // Registrar transação
+  await db.insert(tokenTransactions).values({
+    userId,
+    type: "usage",
+    amount: -amount,
+    balanceBefore,
+    balanceAfter,
+    renderId,
+    description: description || `Renderização #${renderId}`,
+    paymentStatus: "completed",
+  });
+
+  return balanceAfter;
+}
+
+/**
+ * Adiciona tokens ao saldo do usuário e registra transação
+ */
+export async function addTokens(userId: number, amount: number, packageId?: number, priceInCents?: number, description?: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  // Buscar saldo atual
+  const user = await db.select().from(users).where(eq(users.id, userId)).limit(1);
+  if (!user || user.length === 0) throw new Error("User not found");
+
+  const balanceBefore = user[0].tokenBalance;
+  const balanceAfter = balanceBefore + amount;
+
+  // Atualizar saldo
+  await db.update(users).set({ tokenBalance: balanceAfter }).where(eq(users.id, userId));
+
+  // Registrar transação
+  await db.insert(tokenTransactions).values({
+    userId,
+    type: "purchase",
+    amount,
+    balanceBefore,
+    balanceAfter,
+    packageId,
+    priceInCents,
+    description: description || `Compra de ${amount} tokens`,
+    paymentStatus: "completed",
+  });
+
+  return balanceAfter;
+}
+
+/**
+ * Busca histórico de transações do usuário
+ */
+export async function getUserTokenTransactions(userId: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  return await db.select().from(tokenTransactions).where(eq(tokenTransactions.userId, userId)).orderBy(desc(tokenTransactions.createdAt));
+}
+

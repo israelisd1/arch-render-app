@@ -1,5 +1,7 @@
 import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
+import Header from "@/components/Header";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -9,6 +11,7 @@ import { APP_LOGO, APP_TITLE, getLoginUrl } from "@/const";
 import { trpc } from "@/lib/trpc";
 import { useState } from "react";
 import { toast } from "sonner";
+import { Coins } from "lucide-react";
 import { Link, useLocation } from "wouter";
 
 export default function RenderPage() {
@@ -19,6 +22,7 @@ export default function RenderPage() {
   const [sceneType, setSceneType] = useState<"interior" | "exterior">("interior");
   const [outputFormat, setOutputFormat] = useState<"webp" | "jpg" | "png" | "avif">("jpg");
   const [prompt, setPrompt] = useState("");
+  const [showInsufficientTokensDialog, setShowInsufficientTokensDialog] = useState(false);
 
   const createRender = trpc.render.create.useMutation({
     onSuccess: (data) => {
@@ -26,7 +30,11 @@ export default function RenderPage() {
       setLocation("/history");
     },
     onError: (error) => {
-      toast.error(`Erro ao iniciar renderização: ${error.message}`);
+      if (error.message.includes("Saldo de tokens insuficiente")) {
+        setShowInsufficientTokensDialog(true);
+      } else {
+        toast.error(`Erro ao iniciar renderização: ${error.message}`);
+      }
     },
   });
 
@@ -80,28 +88,7 @@ export default function RenderPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
-      {/* Header */}
-      <header className="border-b border-white/10 bg-black/20 backdrop-blur-sm">
-        <div className="container mx-auto flex items-center justify-between py-4">
-          <Link href="/">
-            <div className="flex items-center gap-3 cursor-pointer">
-              {APP_LOGO && <img src={APP_LOGO} alt={APP_TITLE} className="h-8 w-8" />}
-              <h1 className="text-xl font-bold text-white">{APP_TITLE}</h1>
-            </div>
-          </Link>
-          <div className="flex items-center gap-4">
-            <span className="text-sm text-gray-300">Olá, {user?.name}</span>
-            <Link href="/history">
-              <Button variant="ghost" className="text-white hover:bg-white/10">
-                Histórico
-              </Button>
-            </Link>
-            <Button variant="ghost" onClick={logout} className="text-white hover:bg-white/10">
-              Sair
-            </Button>
-          </div>
-        </div>
-      </header>
+      <Header />
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-12">
@@ -210,6 +197,46 @@ export default function RenderPage() {
           </form>
         </div>
       </main>
+
+      {/* Dialog de Saldo Insuficiente */}
+      <Dialog open={showInsufficientTokensDialog} onOpenChange={setShowInsufficientTokensDialog}>
+        <DialogContent className="bg-slate-900 border-white/20 text-white">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Coins className="h-6 w-6 text-yellow-400" />
+              Saldo de Tokens Insuficiente
+            </DialogTitle>
+            <DialogDescription className="text-gray-400">
+              Você precisa de pelo menos 1 token para criar uma renderização.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="py-4">
+            <p className="text-white mb-4">
+              Saldo atual: <strong>{user?.tokenBalance || 0} tokens</strong>
+            </p>
+            <p className="text-gray-300">
+              Cada renderização consome 1 token. Compre mais tokens para continuar criando renderizações incríveis!
+            </p>
+          </div>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setShowInsufficientTokensDialog(false)}
+              className="border-white/20 text-white hover:bg-white/10"
+            >
+              Cancelar
+            </Button>
+            <Button
+              asChild
+              className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white"
+            >
+              <Link href="/tokens">
+                <a>Comprar Tokens</a>
+              </Link>
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

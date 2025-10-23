@@ -17,6 +17,7 @@ export const users = mysqlTable("users", {
   email: varchar("email", { length: 320 }),
   loginMethod: varchar("loginMethod", { length: 64 }),
   role: mysqlEnum("role", ["user", "admin"]).default("user").notNull(),
+  tokenBalance: int("tokenBalance").default(3).notNull(), // Saldo de tokens (inicia com 3)
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
   lastSignedIn: timestamp("lastSignedIn").defaultNow().notNull(),
@@ -45,3 +46,42 @@ export const renders = mysqlTable("renders", {
 
 export type Render = typeof renders.$inferSelect;
 export type InsertRender = typeof renders.$inferInsert;
+
+/**
+ * Pacotes de tokens disponíveis para compra
+ */
+export const tokenPackages = mysqlTable("token_packages", {
+  id: int("id").autoincrement().primaryKey(),
+  name: varchar("name", { length: 100 }).notNull(), // Ex: "Pacote Inicial"
+  tokenAmount: int("tokenAmount").notNull(), // Quantidade de tokens
+  priceInCents: int("priceInCents").notNull(), // Preço em centavos (ex: 5000 = R$ 50,00)
+  pricePerToken: int("pricePerToken").notNull(), // Preço por token em centavos
+  isActive: int("isActive").default(1).notNull(), // 1 = ativo, 0 = inativo
+  displayOrder: int("displayOrder").default(0).notNull(), // Ordem de exibição
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type TokenPackage = typeof tokenPackages.$inferSelect;
+export type InsertTokenPackage = typeof tokenPackages.$inferInsert;
+
+/**
+ * Histórico de transações de tokens
+ */
+export const tokenTransactions = mysqlTable("token_transactions", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  type: mysqlEnum("type", ["purchase", "usage", "refund", "bonus"]).notNull(),
+  amount: int("amount").notNull(), // Positivo para crédito, negativo para débito
+  balanceBefore: int("balanceBefore").notNull(),
+  balanceAfter: int("balanceAfter").notNull(),
+  packageId: int("packageId"), // Referência ao pacote comprado (se type = purchase)
+  renderId: int("renderId"), // Referência à renderização (se type = usage)
+  priceInCents: int("priceInCents"), // Valor pago (se type = purchase)
+  paymentStatus: mysqlEnum("paymentStatus", ["pending", "completed", "failed", "refunded"]),
+  paymentMethod: varchar("paymentMethod", { length: 50 }), // Ex: "credit_card", "pix"
+  description: text("description"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type TokenTransaction = typeof tokenTransactions.$inferSelect;
+export type InsertTokenTransaction = typeof tokenTransactions.$inferInsert;

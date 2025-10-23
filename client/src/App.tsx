@@ -7,6 +7,7 @@ import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
 import RenderPage from "./pages/RenderPage";
 import HistoryPage from "./pages/HistoryPage";
+import TokensPage from "./pages/TokensPage";
 
 function Router() {
   // make sure to consider if you need authentication for certain routes
@@ -15,6 +16,7 @@ function Router() {
       <Route path={"/"} component={Home} />
       <Route path={"/render"} component={RenderPage} />
       <Route path={"/history"} component={HistoryPage} />
+      <Route path={"/tokens"} component={TokensPage} />
       <Route path={"/404"} component={NotFound} />
       <Route component={NotFound} />
     </Switch>

@@ -5,7 +5,7 @@ import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { protectedProcedure, publicProcedure, router } from "./_core/trpc";
 import { callArchitectureRenderingAPI } from "./architectureApi";
-import { createRender, getRenderById, getUserRenders, updateRenderStatus, getDb } from "./db";
+import { addTokens, createRender, deductTokens, getActiveTokenPackages, getRenderById, getUserTokenTransactions, getUserRenders, updateRenderStatus, getDb } from "./db";
 import { renders } from "../drizzle/schema";
 import { storagePut } from "./storage";
 
@@ -37,7 +37,15 @@ export const appRouter = router({
         })
       )
       .mutation(async ({ ctx, input }) => {
-        // 1. Fazer upload da imagem original para S3
+        // 1. Verificar saldo de tokens
+        if (ctx.user.tokenBalance < 1) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Saldo de tokens insuficiente. Compre mais tokens para continuar.",
+          });
+        }
+
+        // 2. Fazer upload da imagem original para S3
         const imageBuffer = Buffer.from(input.imageBase64.split(",")[1], "base64");
         const timestamp = Date.now();
         const randomSuffix = Math.random().toString(36).substring(7);
@@ -49,7 +57,7 @@ export const appRouter = router({
           `image/${input.outputFormat}`
         );
 
-        // 2. Criar registro no banco
+        // 3. Criar registro no banco
         const result = await createRender({
           userId: ctx.user.id,
           originalImageUrl,
@@ -61,7 +69,23 @@ export const appRouter = router({
 
         const renderId = Number(result[0].insertId);
 
-        // 3. Chamar API de renderização em background
+        // 4. Deduzir 1 token do saldo
+        try {
+          await deductTokens(ctx.user.id, 1, renderId, `Renderização #${renderId}`);
+          console.log(`[Render ${renderId}] 1 token deduzido. Novo saldo: ${ctx.user.tokenBalance - 1}`);
+        } catch (error: any) {
+          console.error(`[Render ${renderId}] Erro ao deduzir token:`, error);
+          await updateRenderStatus(renderId, "failed", {
+            errorMessage: "Erro ao processar pagamento de token",
+            completedAt: new Date(),
+          });
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "Erro ao processar pagamento de token",
+          });
+        }
+
+        // 5. Chamar API de renderização em background
         (async () => {
           try {
             console.log(`[Render ${renderId}] Iniciando chamada à API...`);
@@ -143,7 +167,15 @@ export const appRouter = router({
         })
       )
       .mutation(async ({ ctx, input }) => {
-        // 1. Buscar renderização original
+        // 1. Verificar saldo de tokens
+        if (ctx.user.tokenBalance < 1) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Saldo de tokens insuficiente. Compre mais tokens para continuar.",
+          });
+        }
+
+        // 2. Buscar renderização original
         const parentRender = await getRenderById(input.parentRenderId);
         
         if (!parentRender) {
@@ -167,7 +199,7 @@ export const appRouter = router({
           });
         }
 
-        // 2. Criar nova renderização usando a imagem renderizada como base
+        // 3. Criar nova renderização usando a imagem renderizada como base
         const db = await getDb();
         if (!db) throw new Error("Database not available");
 
@@ -183,7 +215,23 @@ export const appRouter = router({
 
         const renderId = Number(result[0].insertId);
 
-        // 3. Chamar API de renderização em background
+        // 4. Deduzir 1 token do saldo
+        try {
+          await deductTokens(ctx.user.id, 1, renderId, `Refinamento #${renderId}`);
+          console.log(`[Refine ${renderId}] 1 token deduzido. Novo saldo: ${ctx.user.tokenBalance - 1}`);
+        } catch (error: any) {
+          console.error(`[Refine ${renderId}] Erro ao deduzir token:`, error);
+          await updateRenderStatus(renderId, "failed", {
+            errorMessage: "Erro ao processar pagamento de token",
+            completedAt: new Date(),
+          });
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "Erro ao processar pagamento de token",
+          });
+        }
+
+        // 5. Chamar API de renderização em background
         (async () => {
           try {
             console.log(`[Refine ${renderId}] Iniciando refinamento da renderização ${input.parentRenderId}...`);
@@ -221,6 +269,55 @@ export const appRouter = router({
 
         return { id: renderId };
       }),
+  }),
+
+  /**
+   * Rotas relacionadas a tokens
+   */
+  tokens: router({
+    /**
+     * Lista pacotes de tokens disponíveis
+     */
+    listPackages: publicProcedure.query(async () => {
+      return await getActiveTokenPackages();
+    }),
+
+    /**
+     * Compra um pacote de tokens (mock - sem pagamento real)
+     */
+    purchase: protectedProcedure
+      .input(z.object({ packageId: z.number() }))
+      .mutation(async ({ ctx, input }) => {
+        const packages = await getActiveTokenPackages();
+        const pkg = packages.find((p) => p.id === input.packageId);
+
+        if (!pkg) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "Pacote não encontrado",
+          });
+        }
+
+        // Adicionar tokens ao saldo
+        const newBalance = await addTokens(
+          ctx.user.id,
+          pkg.tokenAmount,
+          pkg.id,
+          pkg.priceInCents,
+          `Compra de ${pkg.name} (${pkg.tokenAmount} tokens)`
+        );
+
+        console.log(`[Token Purchase] Usuário ${ctx.user.id} comprou ${pkg.tokenAmount} tokens. Novo saldo: ${newBalance}`);
+
+        return { success: true, newBalance, tokensAdded: pkg.tokenAmount };
+      }),
+
+    /**
+     * Busca histórico de transações do usuário
+     */
+    transactions: protectedProcedure.query(async ({ ctx }) => {
+      return await getUserTokenTransactions(ctx.user.id);
+    }),
   }),
 });
 
