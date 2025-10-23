@@ -15,6 +15,13 @@
       "when": 1761239334820,
       "tag": "0001_cooing_joshua_kane",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1761240616302,
+      "tag": "0002_quiet_swordsman",
+      "breakpoints": true
     }
   ]
 }

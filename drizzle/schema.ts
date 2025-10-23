@@ -36,6 +36,7 @@ export const renders = mysqlTable("renders", {
   sceneType: mysqlEnum("sceneType", ["interior", "exterior"]).notNull(),
   outputFormat: varchar("outputFormat", { length: 10 }).notNull(),
   prompt: text("prompt"),
+  parentRenderId: int("parentRenderId"), // ID da renderização original (para refinamentos)
   status: mysqlEnum("status", ["pending", "processing", "completed", "failed"]).default("pending").notNull(),
   errorMessage: text("errorMessage"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),

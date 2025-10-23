@@ -1,0 +1,8 @@
+{
+  "query": "ALTER TABLE renders ADD COLUMN parentRenderId INT NULL AFTER prompt",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 3ES6PvcnTNEV8vB.57a33a906c17 --database mJzsRrstkbLobg3DApXsgD --execute ALTER TABLE renders ADD COLUMN parentRenderId INT NULL AFTER prompt",
+  "returncode": 1,
+  "logs": [
+    "ERROR 1060 (42S21) at line 1: Duplicate column name 'parentRenderId'"
+  ]
+}

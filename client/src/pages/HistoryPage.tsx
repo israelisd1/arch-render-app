@@ -4,7 +4,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { APP_LOGO, APP_TITLE, getLoginUrl } from "@/const";
 import { trpc } from "@/lib/trpc";
 import { Link } from "wouter";
-import { Loader2 } from "lucide-react";
+import { Loader2, Sparkles } from "lucide-react";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { useState } from "react";
+import { toast } from "sonner";
 
 export default function HistoryPage() {
   const { user, isAuthenticated, logout } = useAuth();
@@ -12,6 +17,33 @@ export default function HistoryPage() {
     enabled: isAuthenticated,
     refetchInterval: 5000, // Atualiza a cada 5 segundos para ver progresso
   });
+
+  const [refineDialogOpen, setRefineDialogOpen] = useState(false);
+  const [selectedRenderId, setSelectedRenderId] = useState<number | null>(null);
+  const [refinePrompt, setRefinePrompt] = useState("");
+
+  const utils = trpc.useUtils();
+  const refineMutation = trpc.render.refine.useMutation({
+    onSuccess: () => {
+      toast.success("Refinamento iniciado! Acompanhe o progresso no histórico.");
+      setRefineDialogOpen(false);
+      setRefinePrompt("");
+      setSelectedRenderId(null);
+      utils.render.list.invalidate();
+    },
+    onError: (error) => {
+      toast.error(`Erro ao iniciar refinamento: ${error.message}`);
+    },
+  });
+
+  const handleRefine = () => {
+    if (selectedRenderId) {
+      refineMutation.mutate({
+        parentRenderId: selectedRenderId,
+        prompt: refinePrompt || undefined,
+      });
+    }
+  };
 
   if (!isAuthenticated) {
     return (
@@ -143,11 +175,25 @@ export default function HistoryPage() {
                       <p className="text-sm text-gray-300 mb-3 line-clamp-2">{render.prompt}</p>
                     )}
                     {render.status === "completed" && render.renderedImageUrl && (
-                      <Button asChild variant="outline" className="w-full border-white/20 text-white hover:bg-white/10">
-                        <a href={render.renderedImageUrl} target="_blank" rel="noopener noreferrer">
-                          Baixar Imagem
-                        </a>
-                      </Button>
+                      <div className="space-y-2">
+                        <Button asChild variant="outline" className="w-full border-white/20 text-white hover:bg-white/10">
+                          <a href={render.renderedImageUrl} target="_blank" rel="noopener noreferrer">
+                            Baixar Imagem
+                          </a>
+                        </Button>
+                        <Button
+                          onClick={() => {
+                            setSelectedRenderId(render.id);
+                            setRefinePrompt("");
+                            setRefineDialogOpen(true);
+                          }}
+                          variant="outline"
+                          className="w-full border-purple-500/50 text-purple-300 hover:bg-purple-500/10"
+                        >
+                          <Sparkles className="h-4 w-4 mr-2" />
+                          Refinar
+                        </Button>
+                      </div>
                     )}
                     {render.status === "failed" && render.errorMessage && (
                       <p className="text-sm text-red-300">Erro: {render.errorMessage}</p>
@@ -159,6 +205,62 @@ export default function HistoryPage() {
           )}
         </div>
       </main>
+
+      {/* Dialog de Refinamento */}
+      <Dialog open={refineDialogOpen} onOpenChange={setRefineDialogOpen}>
+        <DialogContent className="bg-slate-900 border-white/20 text-white">
+          <DialogHeader>
+            <DialogTitle>Refinar Renderização</DialogTitle>
+            <DialogDescription className="text-gray-400">
+              Adicione um prompt para ajustar a renderização existente. A imagem renderizada será usada como base.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div>
+              <Label htmlFor="refine-prompt" className="text-white">
+                Prompt de Refinamento (opcional)
+              </Label>
+              <Textarea
+                id="refine-prompt"
+                placeholder="Ex: add more natural lighting, warmer tones, modern furniture"
+                value={refinePrompt}
+                onChange={(e) => setRefinePrompt(e.target.value)}
+                className="mt-2 bg-white/10 border-white/20 text-white placeholder:text-gray-400"
+                rows={4}
+              />
+              <p className="mt-2 text-sm text-gray-400">
+                Descreva os ajustes que deseja fazer na renderização
+              </p>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setRefineDialogOpen(false)}
+              className="border-white/20 text-white hover:bg-white/10"
+            >
+              Cancelar
+            </Button>
+            <Button
+              onClick={handleRefine}
+              disabled={refineMutation.isPending}
+              className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white"
+            >
+              {refineMutation.isPending ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  Processando...
+                </>
+              ) : (
+                <>
+                  <Sparkles className="h-4 w-4 mr-2" />
+                  Iniciar Refinamento
+                </>
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

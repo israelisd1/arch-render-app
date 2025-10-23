@@ -5,7 +5,8 @@ import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { protectedProcedure, publicProcedure, router } from "./_core/trpc";
 import { callArchitectureRenderingAPI } from "./architectureApi";
-import { createRender, getRenderById, getUserRenders, updateRenderStatus } from "./db";
+import { createRender, getRenderById, getUserRenders, updateRenderStatus, getDb } from "./db";
+import { renders } from "../drizzle/schema";
 import { storagePut } from "./storage";
 
 export const appRouter = router({
@@ -129,6 +130,96 @@ export const appRouter = router({
         }
 
         return render;
+      }),
+
+    /**
+     * Refinar uma renderização existente com novo prompt
+     */
+    refine: protectedProcedure
+      .input(
+        z.object({
+          parentRenderId: z.number(),
+          prompt: z.string().optional(),
+        })
+      )
+      .mutation(async ({ ctx, input }) => {
+        // 1. Buscar renderização original
+        const parentRender = await getRenderById(input.parentRenderId);
+        
+        if (!parentRender) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "Renderização original não encontrada",
+          });
+        }
+
+        if (parentRender.userId !== ctx.user.id) {
+          throw new TRPCError({
+            code: "FORBIDDEN",
+            message: "Acesso negado",
+          });
+        }
+
+        if (parentRender.status !== "completed" || !parentRender.renderedImageUrl) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Apenas renderizações concluídas podem ser refinadas",
+          });
+        }
+
+        // 2. Criar nova renderização usando a imagem renderizada como base
+        const db = await getDb();
+        if (!db) throw new Error("Database not available");
+
+        const result = await db.insert(renders).values({
+          userId: ctx.user.id,
+          originalImageUrl: parentRender.renderedImageUrl, // Usar imagem renderizada como base
+          sceneType: parentRender.sceneType,
+          outputFormat: parentRender.outputFormat,
+          prompt: input.prompt,
+          parentRenderId: input.parentRenderId, // Rastrear origem
+          status: "processing",
+        });
+
+        const renderId = Number(result[0].insertId);
+
+        // 3. Chamar API de renderização em background
+        (async () => {
+          try {
+            console.log(`[Refine ${renderId}] Iniciando refinamento da renderização ${input.parentRenderId}...`);
+            const apiResponse = await callArchitectureRenderingAPI({
+              sceneType: parentRender.sceneType,
+              outputFormat: parentRender.outputFormat as "webp" | "jpg" | "png" | "avif",
+              image: parentRender.renderedImageUrl!,
+              prompt: input.prompt,
+            });
+
+            console.log(`[Refine ${renderId}] Resposta da API:`, JSON.stringify(apiResponse));
+
+            if (apiResponse.output) {
+              console.log(`[Refine ${renderId}] Refinamento concluído com sucesso`);
+              await updateRenderStatus(renderId, "completed", {
+                renderedImageUrl: apiResponse.output,
+                completedAt: new Date(),
+              });
+            } else {
+              const errorMsg = apiResponse.error || apiResponse.message || "API não retornou imagem renderizada";
+              console.error(`[Refine ${renderId}] Falha: ${errorMsg}`);
+              await updateRenderStatus(renderId, "failed", {
+                errorMessage: errorMsg,
+                completedAt: new Date(),
+              });
+            }
+          } catch (error: any) {
+            console.error(`[Refine ${renderId}] Erro na requisição:`, error);
+            await updateRenderStatus(renderId, "failed", {
+              errorMessage: error.message || "Erro desconhecido ao processar refinamento",
+              completedAt: new Date(),
+            });
+          }
+        })();
+
+        return { id: renderId };
       }),
   }),
 });
