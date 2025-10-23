@@ -1,6 +1,6 @@
-import { eq } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users } from "../drizzle/schema";
+import { InsertRender, InsertUser, renders, users } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -89,4 +89,53 @@ export async function getUserByOpenId(openId: string) {
   return result.length > 0 ? result[0] : undefined;
 }
 
-// TODO: add feature queries here as your schema grows.
+/**
+ * Cria um novo registro de renderização
+ */
+export async function createRender(render: InsertRender) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  const result = await db.insert(renders).values(render);
+  return result;
+}
+
+/**
+ * Atualiza o status de uma renderização
+ */
+export async function updateRenderStatus(
+  id: number,
+  status: "pending" | "processing" | "completed" | "failed",
+  data?: { renderedImageUrl?: string; errorMessage?: string; completedAt?: Date }
+) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  const updateData: any = { status };
+  if (data?.renderedImageUrl) updateData.renderedImageUrl = data.renderedImageUrl;
+  if (data?.errorMessage) updateData.errorMessage = data.errorMessage;
+  if (data?.completedAt) updateData.completedAt = data.completedAt;
+  
+  await db.update(renders).set(updateData).where(eq(renders.id, id));
+}
+
+/**
+ * Busca renderizações de um usuário
+ */
+export async function getUserRenders(userId: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  return await db.select().from(renders).where(eq(renders.userId, userId)).orderBy(desc(renders.createdAt));
+}
+
+/**
+ * Busca uma renderização por ID
+ */
+export async function getRenderById(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  const result = await db.select().from(renders).where(eq(renders.id, id)).limit(1);
+  return result.length > 0 ? result[0] : undefined;
+}

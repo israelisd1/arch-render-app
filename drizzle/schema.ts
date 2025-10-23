@@ -25,4 +25,22 @@ export const users = mysqlTable("users", {
 export type User = typeof users.$inferSelect;
 export type InsertUser = typeof users.$inferInsert;
 
-// TODO: Add your tables here
+/**
+ * Tabela para armazenar histórico de renderizações
+ */
+export const renders = mysqlTable("renders", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  originalImageUrl: text("originalImageUrl").notNull(),
+  renderedImageUrl: text("renderedImageUrl"),
+  sceneType: mysqlEnum("sceneType", ["interior", "exterior"]).notNull(),
+  outputFormat: varchar("outputFormat", { length: 10 }).notNull(),
+  prompt: text("prompt"),
+  status: mysqlEnum("status", ["pending", "processing", "completed", "failed"]).default("pending").notNull(),
+  errorMessage: text("errorMessage"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  completedAt: timestamp("completedAt"),
+});
+
+export type Render = typeof renders.$inferSelect;
+export type InsertRender = typeof renders.$inferInsert;
