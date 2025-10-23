@@ -11,9 +11,10 @@ interface RenderRequest {
 }
 
 interface RenderResponse {
-  url?: string;
+  output?: string; // URL da imagem renderizada
   base64?: string;
   error?: string;
+  message?: string; // Mensagem de erro da API
 }
 
 /**

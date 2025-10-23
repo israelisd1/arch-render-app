@@ -1,0 +1,23 @@
+{
+  "query": "SELECT * FROM renders ORDER BY createdAt DESC LIMIT 1",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 3ES6PvcnTNEV8vB.57a33a906c17 --database mJzsRrstkbLobg3DApXsgD --execute SELECT * FROM renders ORDER BY createdAt DESC LIMIT 1",
+  "rows": [
+    {
+      "id": "1",
+      "userId": "1",
+      "originalImageUrl": "https://forge.manus.ai/v1/storage/download/Fz8DiTiBC23zrkiznASocg/renders/1/original-1761239887479-zkvv6.jpg",
+      "renderedImageUrl": "NULL",
+      "sceneType": "interior",
+      "outputFormat": "jpg",
+      "prompt": "NULL",
+      "status": "failed",
+      "errorMessage": "Unknown error",
+      "createdAt": "2025-10-23 17:18:07",
+      "completedAt": "2025-10-23 17:18:31"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tuserId\toriginalImageUrl\trenderedImageUrl\tsceneType\toutputFormat\tprompt\tstatus\terrorMessage\tcreatedAt\tcompletedAt\n1\t1\thttps://forge.manus.ai/v1/storage/download/Fz8DiTiBC23zrkiznASocg/renders/1/original-1761239887479-zkvv6.jpg\tNULL\tinterior\tjpg\tNULL\tfailed\tUnknown error\t2025-10-23 17:18:07\t2025-10-23 17:18:31\n",
+  "stderr": "",
+  "execution_time_ms": 429
+}

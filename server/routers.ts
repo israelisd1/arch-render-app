@@ -63,6 +63,7 @@ export const appRouter = router({
         // 3. Chamar API de renderização em background
         (async () => {
           try {
+            console.log(`[Render ${renderId}] Iniciando chamada à API...`);
             const apiResponse = await callArchitectureRenderingAPI({
               sceneType: input.sceneType,
               outputFormat: input.outputFormat,
@@ -70,20 +71,26 @@ export const appRouter = router({
               prompt: input.prompt,
             });
 
-            if (apiResponse.url) {
+            console.log(`[Render ${renderId}] Resposta da API:`, JSON.stringify(apiResponse));
+
+            if (apiResponse.output) {
+              console.log(`[Render ${renderId}] Renderização concluída com sucesso`);
               await updateRenderStatus(renderId, "completed", {
-                renderedImageUrl: apiResponse.url,
+                renderedImageUrl: apiResponse.output,
                 completedAt: new Date(),
               });
             } else {
+              const errorMsg = apiResponse.error || apiResponse.message || "API não retornou imagem renderizada";
+              console.error(`[Render ${renderId}] Falha: ${errorMsg}`);
               await updateRenderStatus(renderId, "failed", {
-                errorMessage: apiResponse.error || "Unknown error",
+                errorMessage: errorMsg,
                 completedAt: new Date(),
               });
             }
           } catch (error: any) {
+            console.error(`[Render ${renderId}] Erro na requisição:`, error);
             await updateRenderStatus(renderId, "failed", {
-              errorMessage: error.message,
+              errorMessage: error.message || "Erro desconhecido ao processar renderização",
               completedAt: new Date(),
             });
           }
