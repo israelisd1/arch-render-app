@@ -404,6 +404,61 @@ export const appRouter = router({
       return await getUserTokenTransactions(ctx.user.id);
     }),
   }),
+
+  /**
+   * Admin router - apenas para usuários admin
+   */
+  admin: router({
+    /**
+     * Busca estatísticas gerais do sistema
+     */
+    stats: protectedProcedure.query(async ({ ctx }) => {
+      // Verificar se é admin
+      if (ctx.user.email !== 'israelisd@gmail.com') {
+        throw new TRPCError({
+          code: 'FORBIDDEN',
+          message: 'Acesso negado. Apenas administradores podem acessar.',
+        });
+      }
+
+      const { getAdminStats } = await import('./db');
+      return await getAdminStats();
+    }),
+
+    /**
+     * Busca todos os usuários com estatísticas
+     */
+    users: protectedProcedure.query(async ({ ctx }) => {
+      // Verificar se é admin
+      if (ctx.user.email !== 'israelisd@gmail.com') {
+        throw new TRPCError({
+          code: 'FORBIDDEN',
+          message: 'Acesso negado. Apenas administradores podem acessar.',
+        });
+      }
+
+      const { getAllUsersWithStats } = await import('./db');
+      return await getAllUsersWithStats();
+    }),
+
+    /**
+     * Busca detalhes de um usuário específico
+     */
+    userDetails: protectedProcedure
+      .input(z.object({ userId: z.number() }))
+      .query(async ({ ctx, input }) => {
+        // Verificar se é admin
+        if (ctx.user.email !== 'israelisd@gmail.com') {
+          throw new TRPCError({
+            code: 'FORBIDDEN',
+            message: 'Acesso negado. Apenas administradores podem acessar.',
+          });
+        }
+
+        const { getUserDetailedStats } = await import('./db');
+        return await getUserDetailedStats(input.userId);
+      }),
+  }),
 });
 
 export type AppRouter = typeof appRouter;

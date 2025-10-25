@@ -328,3 +328,118 @@ export async function createCoupon(coupon: {
   return result.insertId;
 }
 
+
+// ============================================
+// Admin Functions
+// ============================================
+
+export async function getAllUsersWithStats() {
+  const db = await getDb();
+  if (!db) return [];
+
+  try {
+    const usersData = await db.select().from(users);
+    
+    // Para cada usuário, buscar estatísticas
+    const usersWithStats = await Promise.all(
+      usersData.map(async (user) => {
+        // Total de tokens comprados
+        const purchases = await db
+          .select()
+          .from(tokenTransactions)
+          .where(eq(tokenTransactions.userId, user.id));
+        
+        const totalTokensPurchased = purchases.filter(p => p.type === 'purchase').reduce((sum, p) => sum + p.amount, 0);
+        const totalSpent = purchases.filter(p => p.type === 'purchase' && p.priceInCents).reduce((sum, p) => sum + (p.priceInCents || 0), 0);
+
+        // Total de renderizações
+        const userRenders = await db
+          .select()
+          .from(renders)
+          .where(eq(renders.userId, user.id));
+        
+        const totalRendersCount = userRenders.length;
+        const tokensUsed = userRenders.length; // 1 token por renderização
+
+        return {
+          ...user,
+          totalTokensPurchased,
+          totalSpent,
+          totalRendersCount,
+          tokensUsed,
+        };
+      })
+    );
+
+    return usersWithStats;
+  } catch (error) {
+    console.error("[Database] Failed to get users with stats:", error);
+    return [];
+  }
+}
+
+export async function getAdminStats() {
+  const db = await getDb();
+  if (!db) return null;
+
+  try {
+    // Total de usuários
+    const allUsers = await db.select().from(users);
+    const totalUsers = allUsers.length;
+
+    // Total de tokens comprados
+    const allPurchases = await db.select().from(tokenTransactions);
+    const totalTokensPurchased = allPurchases.filter(p => p.type === 'purchase').reduce((sum, p) => sum + p.amount, 0);
+    const totalRevenue = allPurchases.filter(p => p.type === 'purchase' && p.priceInCents).reduce((sum, p) => sum + (p.priceInCents || 0), 0);
+
+    // Total de renderizações
+    const allRenders = await db.select().from(renders);
+    const totalRenders = allRenders.length;
+    const totalTokensUsed = allRenders.length;
+
+    return {
+      totalUsers,
+      totalTokensPurchased,
+      totalTokensUsed,
+      totalRenders,
+      totalRevenue,
+    };
+  } catch (error) {
+    console.error("[Database] Failed to get admin stats:", error);
+    return null;
+  }
+}
+
+export async function getUserDetailedStats(userId: number) {
+  const db = await getDb();
+  if (!db) return null;
+
+  try {
+    const user = await db.select().from(users).where(eq(users.id, userId)).limit(1);
+    if (user.length === 0) return null;
+
+    // Histórico de compras
+    const purchases = await db
+      .select()
+      .from(tokenTransactions)
+      .where(eq(tokenTransactions.userId, userId))
+      .orderBy(desc(tokenTransactions.createdAt));
+
+    // Histórico de renderizações
+    const userRenders = await db
+      .select()
+      .from(renders)
+      .where(eq(renders.userId, userId))
+      .orderBy(desc(renders.createdAt));
+
+    return {
+      user: user[0],
+      purchases,
+      renders: userRenders,
+    };
+  } catch (error) {
+    console.error("[Database] Failed to get user detailed stats:", error);
+    return null;
+  }
+}
+
