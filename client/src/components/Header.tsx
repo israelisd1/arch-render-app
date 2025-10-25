@@ -65,6 +65,11 @@ export default function Header() {
               <Link href="/history">
                 <span className="text-amber-800 hover:text-amber-900 transition-colors cursor-pointer">{t("header.history")}</span>
               </Link>
+              {user?.email === "israelisd@gmail.com" && (
+                <Link href="/admin">
+                  <span className="text-amber-800 hover:text-amber-900 transition-colors cursor-pointer font-semibold">Admin</span>
+                </Link>
+              )}
               <Button variant="ghost" onClick={logout} className="text-amber-800 hover:text-amber-900 hover:bg-amber-100">
                 {t("header.logout")}
               </Button>
@@ -105,6 +110,11 @@ export default function Header() {
                 <Link href="/history">
                   <span className="block py-2 text-amber-800 hover:text-amber-900 transition-colors cursor-pointer">{t("header.history")}</span>
                 </Link>
+                {user?.email === "israelisd@gmail.com" && (
+                  <Link href="/admin">
+                    <span className="block py-2 text-amber-800 hover:text-amber-900 transition-colors cursor-pointer font-semibold">Admin</span>
+                  </Link>
+                )}
                 <Button variant="outline" onClick={() => { logout(); setMobileMenuOpen(false); }} className="w-full border-amber-300 text-amber-900 hover:bg-amber-50">
                   {t("header.logout")}
                 </Button>
