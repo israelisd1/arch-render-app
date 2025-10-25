@@ -65,6 +65,52 @@ export default function Home() {
           )}
         </div>
 
+        {/* CTA Section - Free Signup */}
+        <div className="mt-24 mb-20">
+          <div className="mx-auto max-w-3xl bg-gradient-to-br from-amber-600 to-orange-600 rounded-2xl shadow-2xl p-8 md:p-12 text-center text-white">
+            <div className="mb-4">
+              <span className="inline-block bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-semibold mb-4">
+                🎁 {t("cta.tokensHighlight").toUpperCase()}
+              </span>
+            </div>
+            <h3 className="text-3xl md:text-4xl font-bold mb-4">
+              {t("cta.title")}
+            </h3>
+            <p className="text-lg md:text-xl mb-2 text-white/90">
+              {t("cta.subtitle")} <span className="font-bold text-yellow-200">{t("cta.tokensHighlight")}</span> {t("cta.description")}
+            </p>
+            <div className="mt-8">
+              {isAuthenticated ? (
+                <Link href="/render">
+                  <Button size="lg" className="bg-white text-amber-600 hover:bg-amber-50 text-lg px-10 py-6 font-bold shadow-xl">
+                    {t("home.cta")}
+                  </Button>
+                </Link>
+              ) : (
+                <Button asChild size="lg" className="bg-white text-amber-600 hover:bg-amber-50 text-lg px-10 py-6 font-bold shadow-xl">
+                  <a href={getLoginUrl()}>{t("cta.button")}</a>
+                </Button>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Before/After Slider Section */}
+        <div className="mb-24">
+          <div className="text-center mb-12">
+            <h3 className="text-4xl font-bold text-amber-900 mb-3">
+              {t("slider.sectionTitle")}
+            </h3>
+            <p className="text-xl text-amber-700">
+              {t("slider.sectionSubtitle")}
+            </p>
+          </div>
+          <BeforeAfterSlider
+            beforeImage="/example-before.jpg"
+            afterImage="/example-after.jpg"
+          />
+        </div>
+
         {/* Features */}
         <div className="mt-20 grid gap-8 md:grid-cols-3">
           <div className="rounded-xl border border-amber-200 bg-white/90 p-6 backdrop-blur-sm shadow-md hover:shadow-lg transition-shadow">
@@ -90,22 +136,6 @@ export default function Home() {
               {t("home.feature3.description")}
             </p>
           </div>
-        </div>
-
-        {/* Before/After Slider Section */}
-        <div className="mt-32">
-          <div className="text-center mb-12">
-            <h3 className="text-4xl font-bold text-amber-900 mb-3">
-              {t("slider.sectionTitle")}
-            </h3>
-            <p className="text-xl text-amber-700">
-              {t("slider.sectionSubtitle")}
-            </p>
-          </div>
-          <BeforeAfterSlider
-            beforeImage="/example-before.jpg"
-            afterImage="/example-after.jpg"
-          />
         </div>
       </main>
     </div>

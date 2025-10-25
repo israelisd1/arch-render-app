@@ -21,14 +21,14 @@ const translations = {
     
     // Home
     "home.title": "Renderização Arquitetônica",
-    "home.subtitle": "com Inteligência Artificial",
+    "home.subtitle": "com Algoritmos Avançados",
     "home.description": "Transforme seus desenhos 2D em renderizações fotorrealistas de alta qualidade em segundos. Perfeito para arquitetos, designers de interiores e profissionais da construção.",
     "home.cta": "Começar a Renderizar",
     "home.ctaLogin": "Começar Agora",
     "home.feature1.title": "Rápido",
     "home.feature1.description": "Renderizações em 10-30 segundos. Sem espera, sem complicação.",
     "home.feature2.title": "Realista",
-    "home.feature2.description": "IA avançada que preserva geometria e adiciona iluminação realista automaticamente.",
+    "home.feature2.description": "Algoritmos avançados que preservam geometria e adicionam iluminação realista automaticamente.",
     "home.feature3.title": "Profissional",
     "home.feature3.description": "Usado por arquitetos e designers em mais de 90 países.",
     
@@ -84,12 +84,19 @@ const translations = {
     "refine.submit": "Iniciar Refinamento",
     "refine.processing": "Refinando...",
     
+    // CTA Section
+    "cta.title": "Comece Gratuitamente Hoje",
+    "cta.subtitle": "Cadastre-se agora e ganhe",
+    "cta.tokensHighlight": "3 tokens gratuitos",
+    "cta.description": "para testar nossa plataforma. Cada token permite criar uma renderização de alta qualidade.",
+    "cta.button": "Criar Conta Grátis",
+    
     // Before/After Slider
     "slider.before": "Antes (2D)",
     "slider.after": "Depois (Renderizado)",
     "slider.instruction": "Arraste o controle para comparar antes e depois",
-    "slider.sectionTitle": "Veja o Poder da IA",
-    "slider.sectionSubtitle": "Transformação Real de Projetos",
+    "slider.sectionTitle": "Veja a Transformação",
+    "slider.sectionSubtitle": "Resultados Reais de Projetos",
     
     // Insufficient Tokens Dialog
     "insufficientTokens.title": "Saldo de Tokens Insuficiente",
@@ -111,14 +118,14 @@ const translations = {
     
     // Home
     "home.title": "Architectural Rendering",
-    "home.subtitle": "with Artificial Intelligence",
+    "home.subtitle": "with Advanced Algorithms",
     "home.description": "Transform your 2D drawings into photorealistic high-quality renderings in seconds. Perfect for architects, interior designers, and construction professionals.",
     "home.cta": "Start Rendering",
     "home.ctaLogin": "Get Started",
     "home.feature1.title": "Fast",
     "home.feature1.description": "Renderings in 10-30 seconds. No waiting, no hassle.",
     "home.feature2.title": "Realistic",
-    "home.feature2.description": "Advanced AI that preserves geometry and adds realistic lighting automatically.",
+    "home.feature2.description": "Advanced algorithms that preserve geometry and add realistic lighting automatically.",
     "home.feature3.title": "Professional",
     "home.feature3.description": "Used by architects and designers in over 90 countries.",
     
@@ -174,12 +181,19 @@ const translations = {
     "refine.submit": "Start Refinement",
     "refine.processing": "Refining...",
     
+    // CTA Section
+    "cta.title": "Start Free Today",
+    "cta.subtitle": "Sign up now and get",
+    "cta.tokensHighlight": "3 free tokens",
+    "cta.description": "to test our platform. Each token allows you to create one high-quality rendering.",
+    "cta.button": "Sign Up Free",
+    
     // Before/After Slider
     "slider.before": "Before (2D)",
     "slider.after": "After (Rendered)",
     "slider.instruction": "Drag the slider to compare before and after",
-    "slider.sectionTitle": "See the Power of AI",
-    "slider.sectionSubtitle": "Real Project Transformation",
+    "slider.sectionTitle": "See the Transformation",
+    "slider.sectionSubtitle": "Real Project Results",
     
     // Insufficient Tokens Dialog
     "insufficientTokens.title": "Insufficient Token Balance",
