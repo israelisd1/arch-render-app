@@ -114,7 +114,7 @@ export default function RenderPage() {
                         type="file"
                         accept="image/jpeg,image/jpg,image/png,image/webp,image/avif"
                         onChange={handleImageChange}
-                        className="mt-2 bg-white border-amber-300 text-amber-900"
+                        className="mt-2 bg-white border-amber-300 !text-amber-950 file:!text-amber-950"
                         required
                       />
                     </div>
@@ -144,7 +144,7 @@ export default function RenderPage() {
                   <div>
                     <Label htmlFor="sceneType" className="text-amber-900 font-semibold">Tipo de Cena *</Label>
                     <Select value={sceneType} onValueChange={(value: any) => setSceneType(value)}>
-                      <SelectTrigger className="mt-2 bg-white border-amber-300 text-amber-900">
+                      <SelectTrigger className="mt-2 bg-white border-amber-300 !text-amber-950">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
@@ -157,7 +157,7 @@ export default function RenderPage() {
                   <div>
                     <Label htmlFor="outputFormat" className="text-amber-900 font-semibold">Formato de Saída *</Label>
                     <Select value={outputFormat} onValueChange={(value: any) => setOutputFormat(value)}>
-                      <SelectTrigger className="mt-2 bg-white border-amber-300 text-amber-900">
+                      <SelectTrigger className="mt-2 bg-white border-amber-300 !text-amber-950">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
@@ -171,12 +171,12 @@ export default function RenderPage() {
 
                   <div>
                     <Label htmlFor="prompt" className="text-amber-900 font-semibold">Descrição / Orientações (opcional)</Label>
-                    <Textarea
+                      <Textarea
                       id="prompt"
                       placeholder="Ex: modern interior apartment, bright lighting, minimalist style"
                       value={prompt}
                       onChange={(e) => setPrompt(e.target.value)}
-                      className="mt-2 bg-white border-amber-300 text-amber-900 placeholder:text-amber-500"
+                      className="mt-2 bg-white border-amber-300 !text-amber-950 placeholder:!text-amber-600"
                       rows={4}
                     />
                     <p className="mt-2 text-sm text-amber-700">
