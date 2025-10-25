@@ -64,6 +64,7 @@ export async function createCheckoutSession({
       couponCode: couponCode || "",
     },
     allow_promotion_codes: true, // Permite cupons do Stripe
+    locale: "pt-BR", // Força idioma português brasileiro
   };
 
   const session = await stripe.checkout.sessions.create(sessionParams);
