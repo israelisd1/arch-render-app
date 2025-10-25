@@ -43,7 +43,7 @@
 }
 
 :root {
-  --primary: oklch(0.45 0.08 60); /* Marrom terroso */
+  --primary: oklch(0.35 0.10 50); /* Marrom terroso escuro - melhor contraste */
   --primary-foreground: oklch(0.98 0.01 60); /* Bege claro */
   --sidebar-primary: oklch(0.50 0.08 60);
   --sidebar-primary-foreground: oklch(0.98 0.01 60);
@@ -54,17 +54,17 @@
   --chart-5: oklch(0.30 0.08 60);
   --radius: 0.65rem;
   --background: oklch(0.98 0.01 60); /* Bege muito claro */
-  --foreground: oklch(0.25 0.02 60); /* Marrom escuro */
+  --foreground: oklch(0.20 0.04 50); /* Marrom muito escuro - melhor contraste */
   --card: oklch(1 0 0); /* Branco */
-  --card-foreground: oklch(0.25 0.02 60);
+  --card-foreground: oklch(0.20 0.04 50);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.25 0.02 60);
   --secondary: oklch(0.90 0.02 60); /* Bege */
-  --secondary-foreground: oklch(0.30 0.02 60);
+  --secondary-foreground: oklch(0.25 0.04 50);
   --muted: oklch(0.92 0.02 60);
   --muted-foreground: oklch(0.50 0.04 60);
   --accent: oklch(0.85 0.05 60); /* Terracota suave */
-  --accent-foreground: oklch(0.25 0.02 60);
+  --accent-foreground: oklch(0.20 0.04 50);
   --destructive: oklch(0.55 0.20 30); /* Vermelho terroso */
   --destructive-foreground: oklch(0.98 0.01 60);
   --border: oklch(0.85 0.02 60);

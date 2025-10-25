@@ -1,11 +1,12 @@
 import { useAuth } from "@/_core/hooks/useAuth";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
 import { APP_LOGO, APP_TITLE, getLoginUrl } from "@/const";
 import { Link } from "wouter";
 
 export default function Home() {
-  const { user, isAuthenticated, logout } = useAuth();
-
+  const { user, isAuthenticated, loading, logout } = useAuth();
+  const { t } = useLanguage();
   return (
     <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-amber-100">
       {/* Header */}
@@ -41,25 +42,24 @@ export default function Home() {
       <main className="container mx-auto px-4 py-20">
         <div className="mx-auto max-w-4xl text-center">
           <h2 className="mb-6 text-5xl font-bold text-amber-900 md:text-6xl">
-            Renderização Arquitetônica
+            {t("home.title")}
             <span className="block bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">
-              com Inteligência Artificial
+              {t("home.subtitle")}
             </span>
           </h2>
           <p className="mb-8 text-xl text-amber-800">
-            Transforme seus desenhos 2D em renderizações fotorrealistas de alta qualidade em segundos.
-            Perfeito para arquitetos, designers de interiores e profissionais da construção.
+            {t("home.description")}
           </p>
           
           {isAuthenticated ? (
             <Link href="/render">
               <Button size="lg" className="bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white text-lg px-8 py-6">
-                Começar a Renderizar
+                {t("home.cta")}
               </Button>
             </Link>
           ) : (
             <Button asChild size="lg" className="bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white text-lg px-8 py-6">
-              <a href={getLoginUrl()}>Começar Agora</a>
+              <a href={getLoginUrl()}>{t("home.ctaLogin")}</a>
             </Button>
           )}
         </div>
@@ -68,25 +68,25 @@ export default function Home() {
         <div className="mt-20 grid gap-8 md:grid-cols-3">
           <div className="rounded-xl border border-amber-200 bg-white/90 p-6 backdrop-blur-sm shadow-md hover:shadow-lg transition-shadow">
             <div className="mb-4 text-4xl">⚡</div>
-            <h3 className="mb-2 text-xl font-semibold text-amber-900">Rápido</h3>
+            <h3 className="mb-2 text-xl font-semibold text-amber-900">{t("home.feature1.title")}</h3>
             <p className="text-amber-700">
-              Renderizações em 10-30 segundos. Sem espera, sem complicação.
+              {t("home.feature1.description")}
             </p>
           </div>
           
           <div className="rounded-xl border border-amber-200 bg-white/90 p-6 backdrop-blur-sm shadow-md hover:shadow-lg transition-shadow">
             <div className="mb-4 text-4xl">🎨</div>
-            <h3 className="mb-2 text-xl font-semibold text-amber-900">Realista</h3>
+            <h3 className="mb-2 text-xl font-semibold text-amber-900">{t("home.feature2.title")}</h3>
             <p className="text-amber-700">
-              IA avançada que preserva geometria e adiciona iluminação realista automaticamente.
+              {t("home.feature2.description")}
             </p>
           </div>
           
           <div className="rounded-xl border border-amber-200 bg-white/90 p-6 backdrop-blur-sm shadow-md hover:shadow-lg transition-shadow">
             <div className="mb-4 text-4xl">🏭</div>
-            <h3 className="mb-2 text-xl font-semibold text-amber-900">Profissional</h3>
+            <h3 className="mb-2 text-xl font-semibold text-amber-900">{t("home.feature3.title")}</h3>
             <p className="text-amber-700">
-              Usado por arquitetos e designers em mais de 90 países.
+              {t("home.feature3.description")}
             </p>
           </div>
         </div>
