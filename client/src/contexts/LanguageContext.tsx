@@ -75,14 +75,19 @@ const translations = {
     "tokens.buyNow": "Comprar Agora",
     "tokens.note": "💡 Nota: Este é um sistema de demonstração. Nenhum pagamento real é processado.",
     
-    // Refine Dialog
-    "refine.title": "Refinar Renderização",
-    "refine.description": "Adicione instruções para refinar a renderização existente",
-    "refine.prompt": "Prompt de Refinamento",
-    "refine.promptPlaceholder": "Ex: Adicionar mais luz natural, mudar cores para tons quentes...",
-    "refine.cancel": "Cancelar",
-    "refine.submit": "Iniciar Refinamento",
-    "refine.processing": "Refinando...",
+    // Adjust Dialog (Image Adjustments)
+    "adjust.title": "Ajustar Imagem",
+    "adjust.description": "Use os controles abaixo para ajustar cor, brilho, contraste e iluminação",
+    "adjust.saturation": "🎨 Saturação (Cor)",
+    "adjust.brightness": "🔆 Brilho",
+    "adjust.contrast": "⚖️ Contraste",
+    "adjust.lighting": "💡 Iluminação",
+    "adjust.cancel": "Cancelar",
+    "adjust.reset": "Resetar",
+    "adjust.apply": "Aplicar Ajustes",
+    "adjust.applying": "Aplicando...",
+    "adjust.success": "Ajustes aplicados! Acompanhe o progresso no histórico.",
+    "adjust.error": "Erro ao aplicar ajustes",
     
     // CTA Section
     "cta.title": "Comece Gratuitamente Hoje",
@@ -200,14 +205,19 @@ const translations = {
     "tokens.buyNow": "Buy Now",
     "tokens.note": "💡 Note: This is a demonstration system. No real payment is processed.",
     
-    // Refine Dialog
-    "refine.title": "Refine Rendering",
-    "refine.description": "Add instructions to refine the existing rendering",
-    "refine.prompt": "Refinement Prompt",
-    "refine.promptPlaceholder": "E.g.: Add more natural light, change colors to warm tones...",
-    "refine.cancel": "Cancel",
-    "refine.submit": "Start Refinement",
-    "refine.processing": "Refining...",
+    // Adjust Dialog (Image Adjustments)
+    "adjust.title": "Adjust Image",
+    "adjust.description": "Use the controls below to adjust color, brightness, contrast and lighting",
+    "adjust.saturation": "🎨 Saturation (Color)",
+    "adjust.brightness": "🔆 Brightness",
+    "adjust.contrast": "⚖️ Contrast",
+    "adjust.lighting": "💡 Lighting",
+    "adjust.cancel": "Cancel",
+    "adjust.reset": "Reset",
+    "adjust.apply": "Apply Adjustments",
+    "adjust.applying": "Applying...",
+    "adjust.success": "Adjustments applied! Track progress in history.",
+    "adjust.error": "Error applying adjustments",
     
     // CTA Section
     "cta.title": "Start Free Today",

@@ -165,6 +165,10 @@ export const appRouter = router({
         z.object({
           parentRenderId: z.number(),
           prompt: z.string().optional(),
+          saturation: z.number().min(-100).max(100).optional(),
+          brightness: z.number().min(-50).max(50).optional(),
+          contrast: z.number().min(-50).max(50).optional(),
+          lighting: z.number().min(-30).max(30).optional(),
         })
       )
       .mutation(async ({ ctx, input }) => {
@@ -211,6 +215,10 @@ export const appRouter = router({
           outputFormat: parentRender.outputFormat,
           prompt: input.prompt,
           parentRenderId: input.parentRenderId, // Rastrear origem
+          adjustmentSaturation: input.saturation ?? 0,
+          adjustmentBrightness: input.brightness ?? 0,
+          adjustmentContrast: input.contrast ?? 0,
+          adjustmentLighting: input.lighting ?? 0,
           status: "processing",
         });
 
