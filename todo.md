@@ -18,9 +18,7 @@
 
 - [ ] Sistema de autenticação próprio (substituir OAuth Manus)
   - [ ] Login com Google OAuth
-  - [ ] Login com Apple Sign In
   - [ ] Cadastro com email e senha
   - [ ] Recuperação de senha
-  - [ ] Verificação de email
   - [ ] Perfil de usuário editável
 
