@@ -4,40 +4,14 @@ import BeforeAfterSlider from "@/components/BeforeAfterSlider";
 import { Button } from "@/components/ui/button";
 import { APP_LOGO, APP_TITLE, getLoginUrl } from "@/const";
 import { Link } from "wouter";
+import Header from "@/components/Header";
 
 export default function Home() {
   const { user, isAuthenticated, loading, logout } = useAuth();
   const { t } = useLanguage();
   return (
     <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-amber-100">
-      {/* Header */}
-      <header className="border-b border-white/10 bg-black/20 backdrop-blur-sm">
-        <div className="container mx-auto flex items-center justify-between py-4">
-          <div className="flex items-center gap-3">
-            {APP_LOGO && <img src={APP_LOGO} alt={APP_TITLE} className="h-8 w-8" />}
-            <h1 className="text-xl font-bold text-white">{APP_TITLE}</h1>
-          </div>
-          <div className="flex items-center gap-4">
-            {isAuthenticated ? (
-              <>
-                <span className="text-sm text-gray-300">Olá, {user?.name}</span>
-                <Link href="/history">
-                  <Button variant="ghost" className="text-white hover:bg-white/10">
-                    Histórico
-                  </Button>
-                </Link>
-                <Button variant="ghost" onClick={logout} className="text-white hover:bg-white/10">
-                  Sair
-                </Button>
-              </>
-            ) : (
-              <Button asChild variant="default">
-                <a href={getLoginUrl()}>Entrar</a>
-              </Button>
-            )}
-          </div>
-        </div>
-      </header>
+      <Header />
 
       {/* Hero Section */}
       <main className="container mx-auto px-4 py-20">

@@ -21,26 +21,27 @@ export default function Header() {
           </a>
         </Link>
         
-        {/* Mobile menu button */}
-        <button
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="md:hidden p-2 text-amber-900 hover:bg-amber-100 rounded"
-        >
-          {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-        </button>
+        <div className="flex items-center gap-2">
+          {/* Language selector - always visible */}
+          <button
+            onClick={() => setLanguage(language === "pt-BR" ? "en" : "pt-BR")}
+            className="flex items-center gap-1 px-2 py-1 text-sm text-amber-800 hover:bg-amber-100 rounded transition-colors"
+            title={language === "pt-BR" ? "Switch to English" : "Mudar para Português"}
+          >
+            <Globe className="h-4 w-4" />
+            <span className="font-medium">{language === "pt-BR" ? "PT" : "EN"}</span>
+          </button>
 
-        {/* Language selector */}
-        <button
-          onClick={() => setLanguage(language === "pt-BR" ? "en" : "pt-BR")}
-          className="flex items-center gap-1 px-2 py-1 text-sm text-amber-800 hover:bg-amber-100 rounded transition-colors"
-          title={language === "pt-BR" ? "Switch to English" : "Mudar para Português"}
-        >
-          <Globe className="h-4 w-4" />
-          <span className="font-medium">{language === "pt-BR" ? "PT" : "EN"}</span>
-        </button>
+          {/* Mobile menu button */}
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="md:hidden p-2 text-amber-900 hover:bg-amber-100 rounded"
+          >
+            {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </button>
 
-        {/* Desktop nav */}
-        <nav className="hidden md:flex items-center gap-4">
+          {/* Desktop nav */}
+          <nav className="hidden md:flex items-center gap-4">
           {isAuthenticated ? (
             <>
               <span className="text-amber-800">{t("header.hello")}, {user?.name}</span>
@@ -75,7 +76,8 @@ export default function Header() {
               <a href={getLoginUrl()}>{t("header.login")}</a>
             </Button>
           )}
-        </nav>
+          </nav>
+        </div>
 
         {/* Mobile nav */}
         {mobileMenuOpen && (
