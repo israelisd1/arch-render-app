@@ -15,10 +15,10 @@ export default function Header() {
     <header className="border-b border-amber-200 bg-white/95 backdrop-blur-sm sticky top-0 z-50">
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
         <Link href="/">
-          <a className="flex items-center gap-2 text-amber-900 hover:opacity-80 transition-opacity">
+          <div className="flex items-center gap-2 text-amber-900 hover:opacity-80 transition-opacity cursor-pointer">
             <img src={APP_LOGO} alt={APP_TITLE} className="h-8 w-8" />
             <span className="font-bold text-lg md:text-xl truncate max-w-[150px] md:max-w-none">{APP_TITLE}</span>
-          </a>
+          </div>
         </Link>
         
         <div className="flex items-center gap-2">
@@ -47,25 +47,23 @@ export default function Header() {
               <span className="text-amber-800">{t("header.hello")}, {user?.name}</span>
               <div className="flex items-center gap-2">
                 <Link href="/tokens">
-                  <a className="flex items-center gap-2 bg-amber-100 dark:bg-amber-900/30 px-3 py-1.5 rounded-full hover:bg-amber-200 dark:hover:bg-amber-900/50 transition-colors border border-amber-300 dark:border-amber-700">
+                  <div className="flex items-center gap-2 bg-amber-100 dark:bg-amber-900/30 px-3 py-1.5 rounded-full hover:bg-amber-200 dark:hover:bg-amber-900/50 transition-colors border border-amber-300 dark:border-amber-700 cursor-pointer">
                     <Coins className="h-4 w-4 text-amber-600 dark:text-amber-400" />
                     <span className="text-amber-900 dark:text-amber-100 font-semibold">{user?.tokenBalance || 0} {t("header.tokens")}</span>
-                  </a>
+                  </div>
                 </Link>
-                <Button asChild size="sm" className="bg-amber-600 hover:bg-amber-700 text-white">
-                  <Link href="/tokens">
-                    <a className="flex items-center gap-2">
-                      <ShoppingCart className="h-4 w-4" />
-                        {t("header.buyTokens")}
-                    </a>
-                  </Link>
-                </Button>
+                <Link href="/tokens">
+                  <Button size="sm" className="bg-amber-600 hover:bg-amber-700 text-white flex items-center gap-2">
+                    <ShoppingCart className="h-4 w-4" />
+                    {t("header.buyTokens")}
+                  </Button>
+                </Link>
               </div>
               <Link href="/render">
-                <a className="text-amber-800 hover:text-amber-900 transition-colors">{t("header.newRender")}</a>
+                <span className="text-amber-800 hover:text-amber-900 transition-colors cursor-pointer">{t("header.newRender")}</span>
               </Link>
               <Link href="/history">
-                <a className="text-amber-800 hover:text-amber-900 transition-colors">{t("header.history")}</a>
+                <span className="text-amber-800 hover:text-amber-900 transition-colors cursor-pointer">{t("header.history")}</span>
               </Link>
               <Button variant="ghost" onClick={logout} className="text-amber-800 hover:text-amber-900 hover:bg-amber-100">
                 {t("header.logout")}
@@ -89,25 +87,23 @@ export default function Header() {
                 </div>
                 <div className="flex items-center justify-between py-2">
                   <Link href="/tokens">
-                    <a className="flex items-center gap-2 bg-amber-100 px-3 py-2 rounded-lg hover:bg-amber-200 transition-colors border border-amber-300">
+                    <div className="flex items-center gap-2 bg-amber-100 px-3 py-2 rounded-lg hover:bg-amber-200 transition-colors border border-amber-300 cursor-pointer">
                       <Coins className="h-4 w-4 text-amber-600" />
                       <span className="text-amber-900 font-semibold">{user?.tokenBalance || 0} {t("header.tokens")}</span>
-                    </a>
+                    </div>
                   </Link>
-                  <Button asChild size="sm" className="bg-amber-600 hover:bg-amber-700 text-white">
-                    <Link href="/tokens">
-                      <a className="flex items-center gap-2">
-                        <ShoppingCart className="h-4 w-4" />
-                        {t("header.buyTokens").split(" ")[0]}
-                      </a>
-                    </Link>
-                  </Button>
+                  <Link href="/tokens">
+                    <Button size="sm" className="bg-amber-600 hover:bg-amber-700 text-white flex items-center gap-2">
+                      <ShoppingCart className="h-4 w-4" />
+                      {t("header.buyTokens").split(" ")[0]}
+                    </Button>
+                  </Link>
                 </div>
                 <Link href="/render">
-                  <a className="block py-2 text-amber-800 hover:text-amber-900 transition-colors">{t("header.newRender")}</a>
+                  <span className="block py-2 text-amber-800 hover:text-amber-900 transition-colors cursor-pointer">{t("header.newRender")}</span>
                 </Link>
                 <Link href="/history">
-                  <a className="block py-2 text-amber-800 hover:text-amber-900 transition-colors">{t("header.history")}</a>
+                  <span className="block py-2 text-amber-800 hover:text-amber-900 transition-colors cursor-pointer">{t("header.history")}</span>
                 </Link>
                 <Button variant="outline" onClick={() => { logout(); setMobileMenuOpen(false); }} className="w-full border-amber-300 text-amber-900 hover:bg-amber-50">
                   {t("header.logout")}
