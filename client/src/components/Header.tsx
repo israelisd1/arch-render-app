@@ -2,7 +2,7 @@ import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { APP_LOGO, APP_TITLE, getLoginUrl } from "@/const";
 import { Link } from "wouter";
-import { Coins } from "lucide-react";
+import { Coins, ShoppingCart } from "lucide-react";
 
 export default function Header() {
   const { user, isAuthenticated, logout } = useAuth();
@@ -20,12 +20,22 @@ export default function Header() {
           {isAuthenticated ? (
             <>
               <span className="text-white/80">Olá, {user?.name}</span>
-              <Link href="/tokens">
-                <a className="flex items-center gap-2 bg-white/10 px-3 py-1.5 rounded-full hover:bg-white/20 transition-colors">
-                  <Coins className="h-4 w-4 text-yellow-400" />
-                  <span className="text-white font-semibold">{user?.tokenBalance || 0}</span>
-                </a>
-              </Link>
+              <div className="flex items-center gap-2">
+                <Link href="/tokens">
+                  <a className="flex items-center gap-2 bg-amber-100 dark:bg-amber-900/30 px-3 py-1.5 rounded-full hover:bg-amber-200 dark:hover:bg-amber-900/50 transition-colors border border-amber-300 dark:border-amber-700">
+                    <Coins className="h-4 w-4 text-amber-600 dark:text-amber-400" />
+                    <span className="text-amber-900 dark:text-amber-100 font-semibold">{user?.tokenBalance || 0}</span>
+                  </a>
+                </Link>
+                <Button asChild size="sm" className="bg-amber-600 hover:bg-amber-700 text-white">
+                  <Link href="/tokens">
+                    <a className="flex items-center gap-2">
+                      <ShoppingCart className="h-4 w-4" />
+                      Comprar Tokens
+                    </a>
+                  </Link>
+                </Button>
+              </div>
               <Link href="/render">
                 <a className="text-white/80 hover:text-white transition-colors">Nova Renderização</a>
               </Link>

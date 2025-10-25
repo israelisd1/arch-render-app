@@ -29,7 +29,7 @@ export default function TokensPage() {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-amber-100 flex items-center justify-center">
         <Card className="bg-white/10 backdrop-blur-md border-white/20 text-white max-w-md">
           <CardHeader>
             <CardTitle>Autenticação Necessária</CardTitle>
@@ -48,28 +48,28 @@ export default function TokensPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-amber-100">
       <Header />
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-12">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
-            <h1 className="text-5xl font-bold text-white mb-4">
-              Compre <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">Tokens</span>
+            <h1 className="text-5xl font-bold text-amber-900 mb-4">
+              Compre <span className="bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">Tokens</span>
             </h1>
-            <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+            <p className="text-xl text-amber-800 max-w-2xl mx-auto">
               Cada renderização consome 1 token. Escolha o pacote ideal para suas necessidades.
             </p>
-            <div className="mt-6 inline-flex items-center gap-2 bg-white/10 px-6 py-3 rounded-full">
-              <Coins className="h-6 w-6 text-yellow-400" />
-              <span className="text-white text-lg">Saldo atual: <strong>{user?.tokenBalance || 0} tokens</strong></span>
+            <div className="mt-6 inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm px-6 py-3 rounded-full border border-amber-300">
+              <Coins className="h-6 w-6 text-amber-600" />
+              <span className="text-amber-900 text-lg">Saldo atual: <strong>{user?.tokenBalance || 0} tokens</strong></span>
             </div>
           </div>
 
           {packagesLoading ? (
             <div className="flex justify-center items-center py-20">
-              <Loader2 className="h-12 w-12 text-purple-400 animate-spin" />
+              <Loader2 className="h-12 w-12 text-amber-600 animate-spin" />
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -82,47 +82,47 @@ export default function TokensPage() {
                 return (
                   <Card
                     key={pkg.id}
-                    className={`relative bg-white/10 backdrop-blur-md border-white/20 text-white hover:bg-white/15 transition-all ${
-                      isPopular ? "ring-2 ring-purple-500 scale-105" : ""
+                    className={`relative bg-white/90 backdrop-blur-md border-amber-200 hover:shadow-xl transition-all ${
+                      isPopular ? "ring-2 ring-amber-500 scale-105 shadow-lg" : ""
                     }`}
                   >
                     {isPopular && (
-                      <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-purple-600 to-pink-600 px-4 py-1 rounded-full text-sm font-semibold">
+                      <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-amber-600 to-orange-600 px-4 py-1 rounded-full text-sm font-semibold text-white">
                         Mais Popular
                       </div>
                     )}
                     <CardHeader>
-                      <CardTitle className="text-2xl">{pkg.name}</CardTitle>
-                      <CardDescription className="text-gray-300">
-                        <span className="text-4xl font-bold text-white">{pkg.tokenAmount}</span> tokens
+                      <CardTitle className="text-2xl text-amber-900">{pkg.name}</CardTitle>
+                      <CardDescription className="text-amber-700">
+                        <span className="text-4xl font-bold text-amber-900">{pkg.tokenAmount}</span> tokens
                       </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
                       <div className="space-y-2">
                         <div className="flex justify-between items-baseline">
-                          <span className="text-3xl font-bold">R$ {totalPrice.toFixed(2)}</span>
+                          <span className="text-3xl font-bold text-amber-900">R$ {totalPrice.toFixed(2)}</span>
                           {discount > 0 && (
-                            <span className="text-green-400 text-sm font-semibold">
+                            <span className="text-green-600 text-sm font-semibold bg-green-100 px-2 py-1 rounded">
                               {discount}% OFF
                             </span>
                           )}
                         </div>
-                        <p className="text-sm text-gray-400">
+                        <p className="text-sm text-amber-700">
                           R$ {pricePerToken.toFixed(2)} por token
                         </p>
                       </div>
 
                       <ul className="space-y-2">
-                        <li className="flex items-center gap-2 text-sm text-gray-300">
-                          <Check className="h-4 w-4 text-green-400" />
+                        <li className="flex items-center gap-2 text-sm text-amber-800">
+                          <Check className="h-4 w-4 text-green-600" />
                           {pkg.tokenAmount} renderizações
                         </li>
-                        <li className="flex items-center gap-2 text-sm text-gray-300">
-                          <Check className="h-4 w-4 text-green-400" />
+                        <li className="flex items-center gap-2 text-sm text-amber-800">
+                          <Check className="h-4 w-4 text-green-600" />
                           Alta qualidade
                         </li>
-                        <li className="flex items-center gap-2 text-sm text-gray-300">
-                          <Check className="h-4 w-4 text-green-400" />
+                        <li className="flex items-center gap-2 text-sm text-amber-800">
+                          <Check className="h-4 w-4 text-green-600" />
                           Sem expiração
                         </li>
                       </ul>
@@ -132,8 +132,8 @@ export default function TokensPage() {
                         disabled={purchaseMutation.isPending}
                         className={`w-full ${
                           isPopular
-                            ? "bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
-                            : "bg-white/20 hover:bg-white/30"
+                            ? "bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700"
+                            : "bg-amber-600 hover:bg-amber-700"
                         } text-white`}
                       >
                         {purchaseMutation.isPending ? (
@@ -153,7 +153,7 @@ export default function TokensPage() {
           )}
 
           <div className="mt-12 text-center">
-            <p className="text-gray-400 text-sm">
+            <p className="text-amber-700 text-sm">
               💡 <strong>Nota:</strong> Este é um sistema de demonstração. Nenhum pagamento real é processado.
             </p>
           </div>

@@ -68,7 +68,7 @@ export default function RenderPage() {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-amber-100 flex items-center justify-center">
         <Card className="w-full max-w-md bg-white/10 border-white/20 backdrop-blur-sm">
           <CardHeader>
             <CardTitle className="text-white">Autenticação Necessária</CardTitle>
@@ -87,7 +87,7 @@ export default function RenderPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-amber-100">
       <Header />
 
       {/* Main Content */}
@@ -186,7 +186,7 @@ export default function RenderPage() {
 
                   <Button
                     type="submit"
-                    className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white"
+                    className="w-full bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white"
                     disabled={createRender.isPending || !imageFile}
                   >
                     {createRender.isPending ? "Processando..." : "Iniciar Renderização"}
@@ -228,7 +228,7 @@ export default function RenderPage() {
             </Button>
             <Button
               asChild
-              className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white"
+              className="bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white"
             >
               <Link href="/tokens">
                 <a>Comprar Tokens</a>

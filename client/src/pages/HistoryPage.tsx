@@ -48,7 +48,7 @@ export default function HistoryPage() {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-amber-100 flex items-center justify-center">
         <Card className="w-full max-w-md bg-white/10 border-white/20 backdrop-blur-sm">
           <CardHeader>
             <CardTitle className="text-white">Autenticação Necessária</CardTitle>
@@ -90,16 +90,16 @@ export default function HistoryPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-amber-100">
       <Header />
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-12">
         <div className="mx-auto max-w-6xl">
           <div className="mb-8 flex items-center justify-between">
-            <h2 className="text-4xl font-bold text-white">Histórico de Renderizações</h2>
+            <h2 className="text-4xl font-bold text-amber-900">Histórico de Renderizações</h2>
             <Link href="/render">
-              <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white">
+              <Button className="bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white">
                 + Nova Renderização
               </Button>
             </Link>
@@ -110,11 +110,11 @@ export default function HistoryPage() {
               <Loader2 className="h-8 w-8 animate-spin text-white" />
             </div>
           ) : !renders || renders.length === 0 ? (
-            <Card className="bg-white/10 border-white/20 backdrop-blur-sm">
+            <Card className="bg-white/90 border-amber-200">
               <CardContent className="py-20 text-center">
-                <p className="text-xl text-gray-300 mb-4">Nenhuma renderização encontrada</p>
+                <p className="text-xl text-amber-800 mb-4">Nenhuma renderização encontrada</p>
                 <Link href="/render">
-                  <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white">
+                  <Button className="bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white">
                     Criar sua primeira renderização
                   </Button>
                 </Link>
@@ -123,7 +123,7 @@ export default function HistoryPage() {
           ) : (
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {renders.map((render) => (
-                <Card key={render.id} className="bg-white/10 border-white/20 backdrop-blur-sm overflow-hidden">
+                <Card key={render.id} className="bg-white/90 border-amber-200 overflow-hidden hover:shadow-lg transition-shadow">
                   <div className="aspect-video bg-black/20 relative">
                     {render.status === "completed" && render.renderedImageUrl ? (
                       <img
@@ -143,20 +143,20 @@ export default function HistoryPage() {
                     </div>
                   </div>
                   <CardHeader>
-                    <CardTitle className="text-white text-sm">
+                    <CardTitle className="text-amber-900 text-sm">
                       {render.sceneType === "interior" ? "Interior" : "Exterior"} • {render.outputFormat.toUpperCase()}
                     </CardTitle>
-                    <CardDescription className="text-gray-400 text-xs">
+                    <CardDescription className="text-amber-700 text-xs">
                       {new Date(render.createdAt).toLocaleString("pt-BR")}
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
                     {render.prompt && (
-                      <p className="text-sm text-gray-300 mb-3 line-clamp-2">{render.prompt}</p>
+                      <p className="text-sm text-amber-800 mb-3 line-clamp-2">{render.prompt}</p>
                     )}
                     {render.status === "completed" && render.renderedImageUrl && (
                       <div className="space-y-2">
-                        <Button asChild variant="outline" className="w-full border-white/20 text-white hover:bg-white/10">
+                        <Button asChild variant="outline" className="w-full border-amber-300 text-amber-900 hover:bg-amber-50">
                           <a href={render.renderedImageUrl} target="_blank" rel="noopener noreferrer">
                             Baixar Imagem
                           </a>
@@ -168,7 +168,7 @@ export default function HistoryPage() {
                             setRefineDialogOpen(true);
                           }}
                           variant="outline"
-                          className="w-full border-purple-500/50 text-purple-300 hover:bg-purple-500/10"
+                          className="w-full border-amber-400 text-amber-700 hover:bg-amber-50"
                         >
                           <Sparkles className="h-4 w-4 mr-2" />
                           Refinar
@@ -176,7 +176,7 @@ export default function HistoryPage() {
                       </div>
                     )}
                     {render.status === "failed" && render.errorMessage && (
-                      <p className="text-sm text-red-300">Erro: {render.errorMessage}</p>
+                      <p className="text-sm text-red-600 bg-red-50 p-2 rounded">Erro: {render.errorMessage}</p>
                     )}
                   </CardContent>
                 </Card>
@@ -224,7 +224,7 @@ export default function HistoryPage() {
             <Button
               onClick={handleRefine}
               disabled={refineMutation.isPending}
-              className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white"
+              className="bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white"
             >
               {refineMutation.isPending ? (
                 <>
