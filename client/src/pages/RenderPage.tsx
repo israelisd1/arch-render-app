@@ -93,28 +93,28 @@ export default function RenderPage() {
       {/* Main Content */}
       <main className="container mx-auto px-4 py-12">
         <div className="mx-auto max-w-4xl">
-          <h2 className="mb-8 text-4xl font-bold text-white">Nova Renderização</h2>
+          <h2 className="mb-8 text-4xl font-bold text-amber-900">Nova Renderização</h2>
           
           <form onSubmit={handleSubmit}>
             <div className="grid gap-8 md:grid-cols-2">
               {/* Left Column - Image Upload */}
-              <Card className="bg-white/10 border-white/20 backdrop-blur-sm">
+              <Card className="bg-white/90 backdrop-blur border-amber-200">
                 <CardHeader>
-                  <CardTitle className="text-white">Imagem 2D</CardTitle>
-                  <CardDescription className="text-gray-300">
+                  <CardTitle className="text-amber-900">Imagem 2D</CardTitle>
+                  <CardDescription className="text-amber-700">
                     Faça upload da sua imagem arquitetônica
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
                     <div>
-                      <Label htmlFor="image" className="text-white">Selecione a imagem</Label>
+                      <Label htmlFor="image" className="text-amber-900 font-semibold">Selecione a imagem</Label>
                       <Input
                         id="image"
                         type="file"
                         accept="image/jpeg,image/jpg,image/png,image/webp,image/avif"
                         onChange={handleImageChange}
-                        className="mt-2 bg-white/10 border-white/20 text-white"
+                        className="mt-2 bg-white border-amber-300 text-amber-900"
                         required
                       />
                     </div>
@@ -124,7 +124,7 @@ export default function RenderPage() {
                         <img
                           src={imagePreview}
                           alt="Preview"
-                          className="w-full rounded-lg border border-white/20"
+                          className="w-full rounded-lg border-2 border-amber-300"
                         />
                       </div>
                     )}
@@ -133,18 +133,18 @@ export default function RenderPage() {
               </Card>
 
               {/* Right Column - Parameters */}
-              <Card className="bg-white/10 border-white/20 backdrop-blur-sm">
+              <Card className="bg-white/90 backdrop-blur border-amber-200">
                 <CardHeader>
-                  <CardTitle className="text-white">Parâmetros</CardTitle>
-                  <CardDescription className="text-gray-300">
+                  <CardTitle className="text-amber-900">Parâmetros</CardTitle>
+                  <CardDescription className="text-amber-700">
                     Configure as opções de renderização
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div>
-                    <Label htmlFor="sceneType" className="text-white">Tipo de Cena *</Label>
+                    <Label htmlFor="sceneType" className="text-amber-900 font-semibold">Tipo de Cena *</Label>
                     <Select value={sceneType} onValueChange={(value: any) => setSceneType(value)}>
-                      <SelectTrigger className="mt-2 bg-white/10 border-white/20 text-white">
+                      <SelectTrigger className="mt-2 bg-white border-amber-300 text-amber-900">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
@@ -155,9 +155,9 @@ export default function RenderPage() {
                   </div>
 
                   <div>
-                    <Label htmlFor="outputFormat" className="text-white">Formato de Saída *</Label>
+                    <Label htmlFor="outputFormat" className="text-amber-900 font-semibold">Formato de Saída *</Label>
                     <Select value={outputFormat} onValueChange={(value: any) => setOutputFormat(value)}>
-                      <SelectTrigger className="mt-2 bg-white/10 border-white/20 text-white">
+                      <SelectTrigger className="mt-2 bg-white border-amber-300 text-amber-900">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
@@ -170,16 +170,16 @@ export default function RenderPage() {
                   </div>
 
                   <div>
-                    <Label htmlFor="prompt" className="text-white">Descrição / Orientações (opcional)</Label>
+                    <Label htmlFor="prompt" className="text-amber-900 font-semibold">Descrição / Orientações (opcional)</Label>
                     <Textarea
                       id="prompt"
                       placeholder="Ex: modern interior apartment, bright lighting, minimalist style"
                       value={prompt}
                       onChange={(e) => setPrompt(e.target.value)}
-                      className="mt-2 bg-white/10 border-white/20 text-white placeholder:text-gray-400"
+                      className="mt-2 bg-white border-amber-300 text-amber-900 placeholder:text-amber-500"
                       rows={4}
                     />
-                    <p className="mt-2 text-sm text-gray-400">
+                    <p className="mt-2 text-sm text-amber-700">
                       Descreva o estilo e atmosfera desejados para a renderização
                     </p>
                   </div>
