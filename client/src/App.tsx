@@ -9,6 +9,7 @@ import Home from "./pages/Home";
 import RenderPage from "./pages/RenderPage";
 import HistoryPage from "./pages/HistoryPage";
 import TokensPage from "./pages/TokensPage";
+import CheckoutSuccess from "./pages/CheckoutSuccess";
 
 function Router() {
   // make sure to consider if you need authentication for certain routes
@@ -18,6 +19,7 @@ function Router() {
       <Route path={"/render"} component={RenderPage} />
       <Route path={"/history"} component={HistoryPage} />
       <Route path={"/tokens"} component={TokensPage} />
+      <Route path={"/tokens/success"} component={CheckoutSuccess} />
       <Route path={"/404"} component={NotFound} />
       <Route component={NotFound} />
     </Switch>

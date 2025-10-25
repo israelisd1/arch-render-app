@@ -1,6 +1,6 @@
 import { desc, eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertRender, InsertUser, renders, tokenPackages, tokenTransactions, users } from "../drizzle/schema";
+import { InsertRender, InsertUser, renders, tokenPackages, tokenTransactions, users, stripeTransactions, InsertStripeTransaction, coupons, Coupon } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -228,5 +228,103 @@ export async function getUserTokenTransactions(userId: number) {
   if (!db) throw new Error("Database not available");
   
   return await db.select().from(tokenTransactions).where(eq(tokenTransactions.userId, userId)).orderBy(desc(tokenTransactions.createdAt));
+}
+
+
+
+
+// ============================================
+// STRIPE TRANSACTIONS
+// ============================================
+
+export async function createStripeTransaction(transaction: InsertStripeTransaction) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  const [result] = await db.insert(stripeTransactions).values(transaction);
+  return result.insertId;
+}
+
+export async function getStripeTransactionBySessionId(sessionId: string) {
+  const db = await getDb();
+  if (!db) return undefined;
+
+  const result = await db
+    .select()
+    .from(stripeTransactions)
+    .where(eq(stripeTransactions.sessionId, sessionId))
+    .limit(1);
+
+  return result.length > 0 ? result[0] : undefined;
+}
+
+export async function updateStripeTransaction(
+  sessionId: string,
+  updates: {
+    status?: "pending" | "completed" | "failed" | "refunded";
+    paymentIntentId?: string;
+    paymentMethod?: string;
+    completedAt?: Date;
+  }
+) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  await db
+    .update(stripeTransactions)
+    .set(updates)
+    .where(eq(stripeTransactions.sessionId, sessionId));
+}
+
+export async function getUserStripeTransactions(userId: number) {
+  const db = await getDb();
+  if (!db) return [];
+
+  return await db
+    .select()
+    .from(stripeTransactions)
+    .where(eq(stripeTransactions.userId, userId))
+    .orderBy(desc(stripeTransactions.createdAt));
+}
+
+// ============================================
+// COUPONS
+// ============================================
+
+export async function getCouponByCode(code: string): Promise<Coupon | undefined> {
+  const db = await getDb();
+  if (!db) return undefined;
+
+  const result = await db
+    .select()
+    .from(coupons)
+    .where(eq(coupons.code, code))
+    .limit(1);
+
+  return result.length > 0 ? result[0] : undefined;
+}
+
+export async function incrementCouponUsage(code: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  await db
+    .update(coupons)
+    .set({ usedCount: eq(coupons.usedCount, coupons.usedCount) })
+    .where(eq(coupons.code, code));
+}
+
+export async function createCoupon(coupon: {
+  code: string;
+  discountType: "percentage" | "fixed";
+  discountValue: number;
+  maxUses?: number;
+  expiresAt?: Date;
+}) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  const [result] = await db.insert(coupons).values(coupon);
+  return result.insertId;
 }
 

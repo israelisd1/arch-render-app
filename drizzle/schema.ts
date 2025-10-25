@@ -85,3 +85,44 @@ export const tokenTransactions = mysqlTable("token_transactions", {
 
 export type TokenTransaction = typeof tokenTransactions.$inferSelect;
 export type InsertTokenTransaction = typeof tokenTransactions.$inferInsert;
+
+/**
+ * Transações do Stripe para rastreamento de pagamentos
+ */
+export const stripeTransactions = mysqlTable("stripe_transactions", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  sessionId: varchar("sessionId", { length: 255 }).unique(), // Stripe Checkout Session ID
+  paymentIntentId: varchar("paymentIntentId", { length: 255 }), // Stripe Payment Intent ID
+  amount: int("amount").notNull(), // Valor em centavos
+  currency: varchar("currency", { length: 3 }).default("brl").notNull(),
+  tokenPackageId: int("tokenPackageId"),
+  tokensAmount: int("tokensAmount").notNull(),
+  status: mysqlEnum("status", ["pending", "completed", "failed", "refunded"]).default("pending").notNull(),
+  paymentMethod: varchar("paymentMethod", { length: 50 }), // "card", "pix", etc
+  couponCode: varchar("couponCode", { length: 100 }), // Cupom aplicado
+  discountAmount: int("discountAmount").default(0), // Desconto em centavos
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  completedAt: timestamp("completedAt"),
+});
+
+export type StripeTransaction = typeof stripeTransactions.$inferSelect;
+export type InsertStripeTransaction = typeof stripeTransactions.$inferInsert;
+
+/**
+ * Cupons de desconto
+ */
+export const coupons = mysqlTable("coupons", {
+  id: int("id").autoincrement().primaryKey(),
+  code: varchar("code", { length: 50 }).unique().notNull(),
+  discountType: mysqlEnum("discountType", ["percentage", "fixed"]).notNull(),
+  discountValue: int("discountValue").notNull(), // Porcentagem (ex: 10 = 10%) ou valor fixo em centavos
+  maxUses: int("maxUses"), // Número máximo de usos (null = ilimitado)
+  usedCount: int("usedCount").default(0).notNull(),
+  expiresAt: timestamp("expiresAt"),
+  isActive: int("isActive").default(1).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type Coupon = typeof coupons.$inferSelect;
+export type InsertCoupon = typeof coupons.$inferInsert;

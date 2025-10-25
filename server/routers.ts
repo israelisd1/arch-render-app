@@ -5,7 +5,8 @@ import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { protectedProcedure, publicProcedure, router } from "./_core/trpc";
 import { callArchitectureRenderingAPI } from "./architectureApi";
-import { addTokens, createRender, deductTokens, getActiveTokenPackages, getRenderById, getUserTokenTransactions, getUserRenders, updateRenderStatus, getDb } from "./db";
+import { addTokens, createRender, deductTokens, getActiveTokenPackages, getRenderById, getUserTokenTransactions, getUserRenders, updateRenderStatus, getDb, createStripeTransaction, getCouponByCode, getUserStripeTransactions } from "./db";
+import { createCheckoutSession, validateCoupon, calculateDiscount } from "./stripe";
 import { renders } from "../drizzle/schema";
 import { storagePut } from "./storage";
 
@@ -283,10 +284,46 @@ export const appRouter = router({
     }),
 
     /**
-     * Compra um pacote de tokens (mock - sem pagamento real)
+     * Valida um cupom de desconto
      */
-    purchase: protectedProcedure
-      .input(z.object({ packageId: z.number() }))
+    validateCoupon: protectedProcedure
+      .input(z.object({ code: z.string() }))
+      .mutation(async ({ input }) => {
+        const coupon = await getCouponByCode(input.code.toUpperCase());
+
+        if (!coupon) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "Cupom não encontrado",
+          });
+        }
+
+        const validation = validateCoupon(coupon);
+
+        if (!validation.valid) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: validation.reason || "Cupom inválido",
+          });
+        }
+
+        return {
+          valid: true,
+          discountType: coupon.discountType,
+          discountValue: coupon.discountValue,
+        };
+      }),
+
+    /**
+     * Cria uma sessão de checkout do Stripe
+     */
+    createCheckout: protectedProcedure
+      .input(
+        z.object({
+          packageId: z.number(),
+          couponCode: z.string().optional(),
+        })
+      )
       .mutation(async ({ ctx, input }) => {
         const packages = await getActiveTokenPackages();
         const pkg = packages.find((p) => p.id === input.packageId);
@@ -298,19 +335,67 @@ export const appRouter = router({
           });
         }
 
-        // Adicionar tokens ao saldo
-        const newBalance = await addTokens(
-          ctx.user.id,
-          pkg.tokenAmount,
-          pkg.id,
-          pkg.priceInCents,
-          `Compra de ${pkg.name} (${pkg.tokenAmount} tokens)`
+        let finalPrice = pkg.priceInCents;
+        let discountAmount = 0;
+        let couponCode: string | undefined;
+
+        // Validar e aplicar cupom se fornecido
+        if (input.couponCode) {
+          const coupon = await getCouponByCode(input.couponCode.toUpperCase());
+
+          if (coupon) {
+            const validation = validateCoupon(coupon);
+
+            if (validation.valid) {
+              discountAmount = calculateDiscount(pkg.priceInCents, coupon);
+              finalPrice = pkg.priceInCents - discountAmount;
+              couponCode = coupon.code;
+              console.log(
+                `[Checkout] Cupom ${coupon.code} aplicado. Desconto: R$ ${(discountAmount / 100).toFixed(2)}`
+              );
+            }
+          }
+        }
+
+        // Criar sessão de checkout do Stripe
+        const baseUrl = ctx.req.headers.origin || "http://localhost:3000";
+        const session = await createCheckoutSession({
+          userId: ctx.user.id,
+          packageId: pkg.id,
+          packageName: pkg.name,
+          tokenAmount: pkg.tokenAmount,
+          priceInCents: finalPrice,
+          couponCode,
+          successUrl: `${baseUrl}/tokens/success?session_id={CHECKOUT_SESSION_ID}`,
+          cancelUrl: `${baseUrl}/tokens`,
+        });
+
+        // Registrar transação como pendente
+        await createStripeTransaction({
+          userId: ctx.user.id,
+          sessionId: session.id,
+          amount: finalPrice,
+          currency: "brl",
+          tokenPackageId: pkg.id,
+          tokensAmount: pkg.tokenAmount,
+          status: "pending",
+          couponCode,
+          discountAmount,
+        });
+
+        console.log(
+          `[Checkout] Sessão criada para usuário ${ctx.user.id}: ${session.id}`
         );
 
-        console.log(`[Token Purchase] Usuário ${ctx.user.id} comprou ${pkg.tokenAmount} tokens. Novo saldo: ${newBalance}`);
-
-        return { success: true, newBalance, tokensAdded: pkg.tokenAmount };
+        return { checkoutUrl: session.url };
       }),
+
+    /**
+     * Busca histórico de transações Stripe do usuário
+     */
+    stripeTransactions: protectedProcedure.query(async ({ ctx }) => {
+      return await getUserStripeTransactions(ctx.user.id);
+    }),
 
     /**
      * Busca histórico de transações do usuário
