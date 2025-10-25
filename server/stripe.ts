@@ -39,11 +39,11 @@ export async function createCheckoutSession({
   }
 
   const sessionParams: Stripe.Checkout.SessionCreateParams = {
-    payment_method_types: ["card"], // Cartão de crédito
+    payment_method_types: ["card"], // Cartão de crédito e Pix
     line_items: [
       {
         price_data: {
-          currency: "brl",
+          currency: "brl", // Real brasileiro
           product_data: {
             name: packageName,
             description: `${tokenAmount} tokens para renderização arquitetônica`,
@@ -56,6 +56,7 @@ export async function createCheckoutSession({
     mode: "payment",
     success_url: successUrl,
     cancel_url: cancelUrl,
+    customer_creation: "always", // Criar cliente para futuras compras
     metadata: {
       userId: userId.toString(),
       packageId: packageId.toString(),
@@ -64,11 +65,6 @@ export async function createCheckoutSession({
     },
     allow_promotion_codes: true, // Permite cupons do Stripe
   };
-
-  // Adicionar Pix como método de pagamento (disponível no Brasil)
-  if (ENV.isProduction) {
-    sessionParams.payment_method_types?.push("boleto");
-  }
 
   const session = await stripe.checkout.sessions.create(sessionParams);
 

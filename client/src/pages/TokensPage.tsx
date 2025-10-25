@@ -202,11 +202,26 @@ export default function TokensPage() {
                 const finalPrice = calculateFinalPrice(originalPrice);
                 const hasDiscount = finalPrice < originalPrice;
 
+                // Marcar pacote de 50 tokens como mais popular
+                const isMostPopular = pkg.tokenAmount === 50;
+                // Calcular economia comparado ao menor pacote (R$ 10/token)
+                const basePrice = 1000; // R$ 10,00 em centavos
+                const savings = ((basePrice - pkg.pricePerToken) / basePrice) * 100;
+
                 return (
                   <Card
                     key={pkg.id}
-                    className="bg-white/80 backdrop-blur border-amber-200 hover:border-amber-400 transition-all hover:shadow-lg"
+                    className={`relative bg-white/80 backdrop-blur border-amber-200 hover:border-amber-400 transition-all hover:shadow-lg ${
+                      isMostPopular ? "border-2 border-orange-500 shadow-xl" : ""
+                    }`}
                   >
+                    {isMostPopular && (
+                      <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                        <span className="bg-gradient-to-r from-orange-600 to-red-600 text-white text-xs font-bold px-4 py-1 rounded-full shadow-lg">
+                          {t("home.mostPopular") || "MAIS POPULAR"}
+                        </span>
+                      </div>
+                    )}
                     <CardHeader>
                       <CardTitle className="text-2xl text-amber-900">
                         {pkg.name}
@@ -214,6 +229,11 @@ export default function TokensPage() {
                       <CardDescription className="text-amber-700">
                         {pkg.tokenAmount} tokens
                       </CardDescription>
+                      {savings > 0 && (
+                        <div className="text-sm font-semibold text-green-700 bg-green-50 px-2 py-1 rounded inline-block">
+                          {t("home.save") || "Economize"} {savings.toFixed(0)}%
+                        </div>
+                      )}
                     </CardHeader>
                     <CardContent className="space-y-4">
                       <div>

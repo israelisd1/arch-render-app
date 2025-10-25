@@ -105,6 +105,34 @@ const translations = {
     "insufficientTokens.message": "Cada renderização consome 1 token. Compre mais tokens para continuar criando renderizações incríveis!",
     "insufficientTokens.cancel": "Cancelar",
     "insufficientTokens.buy": "Comprar Tokens",
+    
+    // Tokens Page - Additional
+    "home.yourBalance": "Seu Saldo",
+    "home.buyTokens": "Comprar Tokens",
+    "home.choosePackage": "Escolha o pacote ideal para suas necessidades. Quanto maior o pacote, maior o desconto!",
+    "home.haveCoupon": "Tem um cupom?",
+    "home.couponCode": "Código do cupom",
+    "home.apply": "Aplicar",
+    "home.couponApplied": "Cupom aplicado!",
+    "home.enterCoupon": "Digite um código de cupom",
+    "home.authRequired": "Autenticação Necessária",
+    "home.loginToBuyTokens": "Faça login para comprar tokens",
+    "home.login": "Fazer Login",
+    "home.buy": "Comprar",
+    "home.processing": "Processando...",
+    "home.securePayment": "Pagamento seguro processado pelo Stripe",
+    "home.acceptedMethods": "Aceitamos cartão de crédito e Pix",
+    "home.save": "Economize",
+    "home.mostPopular": "MAIS POPULAR",
+    
+    // Checkout Success
+    "home.paymentSuccess": "Pagamento Confirmado!",
+    "home.tokensAdded": "Seus tokens foram adicionados à sua conta",
+    "home.currentBalance": "Saldo Atual",
+    "home.thankYou": "Obrigado pela sua compra!",
+    "home.readyToRender": "Agora você está pronto para criar renderizações incríveis.",
+    "home.startRendering": "Começar a Renderizar",
+    "home.viewHistory": "Ver Histórico",
   },
   "en": {
     // Header
@@ -202,6 +230,34 @@ const translations = {
     "insufficientTokens.message": "Each rendering consumes 1 token. Buy more tokens to continue creating amazing renderings!",
     "insufficientTokens.cancel": "Cancel",
     "insufficientTokens.buy": "Buy Tokens",
+    
+    // Tokens Page - Additional
+    "home.yourBalance": "Your Balance",
+    "home.buyTokens": "Buy Tokens",
+    "home.choosePackage": "Choose the ideal package for your needs. The bigger the package, the bigger the discount!",
+    "home.haveCoupon": "Have a coupon?",
+    "home.couponCode": "Coupon code",
+    "home.apply": "Apply",
+    "home.couponApplied": "Coupon applied!",
+    "home.enterCoupon": "Enter a coupon code",
+    "home.authRequired": "Authentication Required",
+    "home.loginToBuyTokens": "Sign in to buy tokens",
+    "home.login": "Sign In",
+    "home.buy": "Buy",
+    "home.processing": "Processing...",
+    "home.securePayment": "Secure payment processed by Stripe",
+    "home.acceptedMethods": "We accept credit card and Pix",
+    "home.save": "Save",
+    "home.mostPopular": "MOST POPULAR",
+    
+    // Checkout Success
+    "home.paymentSuccess": "Payment Confirmed!",
+    "home.tokensAdded": "Your tokens have been added to your account",
+    "home.currentBalance": "Current Balance",
+    "home.thankYou": "Thank you for your purchase!",
+    "home.readyToRender": "You're now ready to create amazing renderings.",
+    "home.startRendering": "Start Rendering",
+    "home.viewHistory": "View History",
   },
 };
 
