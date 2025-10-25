@@ -1,0 +1,64 @@
+# Configuração Nginx para Architecture Rendering App
+# Copie este arquivo para /etc/nginx/sites-available/archrender
+# e crie um link simbólico em /etc/nginx/sites-enabled/
+
+server {
+    listen 80;
+    listen [::]:80;
+    
+    # Substitua pelo seu domínio
+    server_name seu-dominio.com www.seu-dominio.com;
+
+    # Logs
+    access_log /var/log/nginx/archrender-access.log;
+    error_log /var/log/nginx/archrender-error.log;
+
+    # Aumentar limite de upload para imagens grandes
+    client_max_body_size 50M;
+
+    # Timeouts para upload e processamento
+    proxy_connect_timeout 600;
+    proxy_send_timeout 600;
+    proxy_read_timeout 600;
+    send_timeout 600;
+
+    # Proxy para aplicação Node.js
+    location / {
+        proxy_pass http://localhost:3000;
+        proxy_http_version 1.1;
+        
+        # Headers necessários
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        
+        # Cache bypass
+        proxy_cache_bypass $http_upgrade;
+        
+        # Buffer settings
+        proxy_buffering off;
+        proxy_request_buffering off;
+    }
+
+    # Cache para assets estáticos (se houver)
+    location ~* \.(jpg|jpeg|png|gif|ico|css|js|svg|woff|woff2|ttf|eot)$ {
+        proxy_pass http://localhost:3000;
+        expires 1y;
+        add_header Cache-Control "public, immutable";
+    }
+
+    # Segurança: Esconder versão do Nginx
+    server_tokens off;
+
+    # Proteção contra clickjacking
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header X-XSS-Protection "1; mode=block" always;
+}
+
+# Configuração HTTPS (será adicionada automaticamente pelo Certbot)
+# Após executar: certbot --nginx -d seu-dominio.com -d www.seu-dominio.com
+
