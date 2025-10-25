@@ -1,5 +1,6 @@
 import { useAuth } from "@/_core/hooks/useAuth";
 import { useLanguage } from "@/contexts/LanguageContext";
+import BeforeAfterSlider from "@/components/BeforeAfterSlider";
 import { Button } from "@/components/ui/button";
 import { APP_LOGO, APP_TITLE, getLoginUrl } from "@/const";
 import { Link } from "wouter";
@@ -89,6 +90,22 @@ export default function Home() {
               {t("home.feature3.description")}
             </p>
           </div>
+        </div>
+
+        {/* Before/After Slider Section */}
+        <div className="mt-32">
+          <div className="text-center mb-12">
+            <h3 className="text-4xl font-bold text-amber-900 mb-3">
+              {t("slider.sectionTitle")}
+            </h3>
+            <p className="text-xl text-amber-700">
+              {t("slider.sectionSubtitle")}
+            </p>
+          </div>
+          <BeforeAfterSlider
+            beforeImage="/example-before.jpg"
+            afterImage="/example-after.jpg"
+          />
         </div>
       </main>
     </div>

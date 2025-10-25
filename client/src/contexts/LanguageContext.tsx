@@ -84,6 +84,13 @@ const translations = {
     "refine.submit": "Iniciar Refinamento",
     "refine.processing": "Refinando...",
     
+    // Before/After Slider
+    "slider.before": "Antes (2D)",
+    "slider.after": "Depois (Renderizado)",
+    "slider.instruction": "Arraste o controle para comparar antes e depois",
+    "slider.sectionTitle": "Veja o Poder da IA",
+    "slider.sectionSubtitle": "Transformação Real de Projetos",
+    
     // Insufficient Tokens Dialog
     "insufficientTokens.title": "Saldo de Tokens Insuficiente",
     "insufficientTokens.description": "Você precisa de pelo menos 1 token para criar uma renderização.",
@@ -166,6 +173,13 @@ const translations = {
     "refine.cancel": "Cancel",
     "refine.submit": "Start Refinement",
     "refine.processing": "Refining...",
+    
+    // Before/After Slider
+    "slider.before": "Before (2D)",
+    "slider.after": "After (Rendered)",
+    "slider.instruction": "Drag the slider to compare before and after",
+    "slider.sectionTitle": "See the Power of AI",
+    "slider.sectionSubtitle": "Real Project Transformation",
     
     // Insufficient Tokens Dialog
     "insufficientTokens.title": "Insufficient Token Balance",
