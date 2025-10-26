@@ -41,4 +41,9 @@
   - [x] Incluir setup de Stripe
   - [x] Incluir setup de RapidAPI
   - [x] Incluir setup de domínio customizado
+- [x] Criar script de deploy automatizado para App Platform
+  - [x] Script de criação inicial do app (app.yaml)
+  - [x] Script de atualização de variáveis de ambiente
+  - [x] Script de deploy/redeploy
+  - [x] Documentação de uso dos scripts
 

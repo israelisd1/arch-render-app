@@ -1,0 +1,111 @@
+name: arqrender
+region: nyc
+
+services:
+  - name: web
+    github:
+      repo: israelisd1/arch-render-app
+      branch: main
+      deploy_on_push: true
+    
+    build_command: pnpm install && pnpm build
+    run_command: pnpm start
+    
+    http_port: 3000
+    
+    instance_count: 1
+    instance_size_slug: basic-xxs
+    
+    routes:
+      - path: /
+    
+    envs:
+      # App Configuration
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "3000"
+      - key: VITE_APP_TITLE
+        value: Arqrender
+      - key: VITE_APP_LOGO
+        value: /logo.png
+      
+      # Database (será preenchido automaticamente pelo App Platform)
+      - key: DATABASE_URL
+        scope: RUN_TIME
+        type: SECRET
+      
+      # NextAuth (Autenticação)
+      - key: NEXTAUTH_SECRET
+        scope: RUN_AND_BUILD_TIME
+        type: SECRET
+      - key: NEXTAUTH_URL
+        scope: RUN_AND_BUILD_TIME
+        type: SECRET
+      
+      # Google OAuth
+      - key: GOOGLE_CLIENT_ID
+        scope: RUN_AND_BUILD_TIME
+        type: SECRET
+      - key: GOOGLE_CLIENT_SECRET
+        scope: RUN_AND_BUILD_TIME
+        type: SECRET
+      
+      # Stripe
+      - key: STRIPE_PUBLISHABLE_KEY
+        scope: RUN_AND_BUILD_TIME
+      - key: STRIPE_SECRET_KEY
+        scope: RUN_AND_BUILD_TIME
+        type: SECRET
+      - key: STRIPE_WEBHOOK_SECRET
+        scope: RUN_AND_BUILD_TIME
+        type: SECRET
+      - key: STRIPE_PRICE_1_TOKEN
+        scope: RUN_AND_BUILD_TIME
+      - key: STRIPE_PRICE_10_TOKENS
+        scope: RUN_AND_BUILD_TIME
+      - key: STRIPE_PRICE_50_TOKENS
+        scope: RUN_AND_BUILD_TIME
+      
+      # RapidAPI
+      - key: RAPIDAPI_KEY
+        scope: RUN_AND_BUILD_TIME
+        type: SECRET
+      - key: RAPIDAPI_HOST
+        scope: RUN_AND_BUILD_TIME
+      
+      # DigitalOcean Spaces (S3)
+      - key: SPACES_REGION
+        scope: RUN_AND_BUILD_TIME
+      - key: SPACES_ENDPOINT
+        scope: RUN_AND_BUILD_TIME
+      - key: SPACES_BUCKET
+        scope: RUN_AND_BUILD_TIME
+      - key: SPACES_ACCESS_KEY
+        scope: RUN_AND_BUILD_TIME
+        type: SECRET
+      - key: SPACES_SECRET_KEY
+        scope: RUN_AND_BUILD_TIME
+        type: SECRET
+      - key: SPACES_CDN_ENDPOINT
+        scope: RUN_AND_BUILD_TIME
+      
+      # SMTP (Email - Opcional)
+      - key: SMTP_HOST
+        scope: RUN_AND_BUILD_TIME
+      - key: SMTP_PORT
+        scope: RUN_AND_BUILD_TIME
+      - key: SMTP_USER
+        scope: RUN_AND_BUILD_TIME
+      - key: SMTP_PASSWORD
+        scope: RUN_AND_BUILD_TIME
+        type: SECRET
+      - key: SMTP_FROM
+        scope: RUN_AND_BUILD_TIME
+
+databases:
+  - name: db
+    engine: PG
+    production: false
+    cluster_name: arqrender-db
+
