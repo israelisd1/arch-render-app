@@ -1,4 +1,4 @@
-# 🚀 Guia Completo de Instalação - Architecture Rendering App
+# 🚀 Guia Completo de Instalação - Arqrender
 
 **Guia passo a passo para instalar a aplicação completa do zero.**
 
@@ -180,7 +180,7 @@ https://archrender-images.sao1.cdn.digitaloceanspaces.com
 3. Clique em **"Create"**
 
 **Preencha**:
-- App name: `Architecture Rendering App`
+- App name: `Arqrender`
 - User support email: Seu email
 - App logo: (opcional)
 - Application home page: `https://seudominio.com.br`
@@ -443,7 +443,7 @@ SMTP_PASS=abcd efgh ijkl mnop
 SMTP_FROM=noreply@seudominio.com.br
 
 # ===== APP CONFIG =====
-VITE_APP_TITLE=Architecture Rendering App
+VITE_APP_TITLE=Arqrender
 VITE_APP_LOGO=/logo.png
 VITE_APP_ID=archrender-prod
 PORT=3000

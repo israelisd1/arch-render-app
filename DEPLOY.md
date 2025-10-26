@@ -1,4 +1,4 @@
-# 🚀 Guia de Deploy - Architecture Rendering App
+# 🚀 Guia de Deploy - Arqrender
 
 Este guia detalha como fazer o deploy da aplicação em servidores externos (VPS/Cloud).
 
@@ -151,7 +151,7 @@ STRIPE_PUBLISHABLE_KEY=pk_live_...
 STRIPE_WEBHOOK_SECRET=whsec_...
 
 # App Config
-VITE_APP_TITLE=Architecture Rendering App
+VITE_APP_TITLE=Arqrender
 VITE_APP_LOGO=/logo.png
 VITE_APP_ID=archrender-prod
 VITE_ANALYTICS_ENDPOINT=

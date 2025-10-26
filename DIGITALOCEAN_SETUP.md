@@ -1,6 +1,6 @@
 # 🌊 Guia Completo - Deploy na DigitalOcean
 
-Guia passo a passo para instalar a **Architecture Rendering App** na DigitalOcean.
+Guia passo a passo para instalar a **Arqrender** na DigitalOcean.
 
 ## 💰 Custos Mensais
 
@@ -238,7 +238,7 @@ OWNER_OPEN_ID=seu_owner_open_id
 OWNER_NAME=Seu Nome
 
 # App Config
-VITE_APP_TITLE=Architecture Rendering App
+VITE_APP_TITLE=Arqrender
 VITE_APP_LOGO=/logo.png
 VITE_APP_ID=archrender-prod
 PORT=3000

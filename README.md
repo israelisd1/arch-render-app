@@ -1,4 +1,4 @@
-# 🏗️ Architecture Rendering App
+# 🏗️ Arqrender
 
 Aplicação web de renderização arquitetônica com IA que transforma desenhos 2D em renderizações fotorrealistas de alta qualidade em segundos.
 
@@ -102,7 +102,7 @@ STRIPE_PUBLISHABLE_KEY=pk_test_...
 STRIPE_WEBHOOK_SECRET=whsec_...
 
 # App Config
-VITE_APP_TITLE=Architecture Rendering App
+VITE_APP_TITLE=Arqrender
 VITE_APP_LOGO=/logo.png
 VITE_APP_ID=seu_app_id
 ```

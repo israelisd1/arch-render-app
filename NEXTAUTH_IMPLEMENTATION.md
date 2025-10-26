@@ -393,7 +393,7 @@ export const authRouter = router({
       await transporter.sendMail({
         from: process.env.SMTP_FROM || "noreply@archrender.com",
         to: user.email!,
-        subject: "Redefinir senha - Architecture Rendering App",
+        subject: "Redefinir senha - Arqrender",
         html: `
           <h2>Redefinir senha</h2>
           <p>Você solicitou a redefinição de senha. Clique no link abaixo:</p>

@@ -25,4 +25,10 @@
   - [x] Botão de download no card de renderização
   - [x] Download direto do S3
   - [x] Nome de arquivo descritivo
+- [x] Rebranding para "Arqrender"
+  - [x] Atualizar nome no frontend (títulos, headers, meta tags)
+  - [x] Atualizar variáveis de ambiente (VITE_APP_TITLE)
+  - [x] Atualizar traduções PT-BR/EN
+  - [x] Atualizar documentação (README, guias)
+  - [x] Atualizar nome de arquivos de download
 

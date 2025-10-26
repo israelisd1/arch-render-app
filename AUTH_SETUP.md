@@ -54,7 +54,7 @@ Vou focar no **NextAuth.js** por ser gratuito, open-source e mais flexível.
 
 **Configurar OAuth Consent Screen**:
 - User Type: **External**
-- App name: **Architecture Rendering App**
+- App name: **Arqrender**
 - User support email: Seu email
 - Developer contact: Seu email
 - Scopes: `email`, `profile`

@@ -1,5 +1,5 @@
 /**
- * Serviço de integração com a Architecture Rendering API via RapidAPI
+ * Serviço de integração com a Arqrender API via RapidAPI
  */
 
 interface RenderRequest {

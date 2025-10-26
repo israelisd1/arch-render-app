@@ -1,4 +1,4 @@
-# Architecture Rendering App
+# Arqrender
 
 Aplicação web para renderização de imagens arquitetônicas 2D em alta qualidade usando Inteligência Artificial.
 

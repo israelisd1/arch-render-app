@@ -59,7 +59,7 @@ export default function HistoryPage() {
       const date = new Date(render.createdAt).toLocaleDateString('pt-BR').replace(/\//g, '-');
       const type = render.sceneType === 'interior' ? 'Interior' : 'Exterior';
       const format = render.outputFormat.toUpperCase();
-      const fileName = `ArchRender_${type}_${date}_${render.id}.${render.outputFormat}`;
+      const fileName = `Arqrender_${type}_${date}_${render.id}.${render.outputFormat}`;
 
       // Fazer download
       const response = await fetch(imageUrl);
