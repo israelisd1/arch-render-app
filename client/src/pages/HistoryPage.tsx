@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { APP_LOGO, APP_TITLE, getLoginUrl } from "@/const";
 import { trpc } from "@/lib/trpc";
 import { Link } from "wouter";
-import { Loader2, Sliders } from "lucide-react";
+import { Loader2, Sliders, Download } from "lucide-react";
 import Header from "@/components/Header";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
@@ -51,6 +51,32 @@ export default function HistoryPage() {
     setBrightness(0);
     setContrast(0);
     setLighting(0);
+  };
+
+  const handleDownload = async (imageUrl: string, render: any) => {
+    try {
+      // Criar nome descritivo do arquivo
+      const date = new Date(render.createdAt).toLocaleDateString('pt-BR').replace(/\//g, '-');
+      const type = render.sceneType === 'interior' ? 'Interior' : 'Exterior';
+      const format = render.outputFormat.toUpperCase();
+      const fileName = `ArchRender_${type}_${date}_${render.id}.${render.outputFormat}`;
+
+      // Fazer download
+      const response = await fetch(imageUrl);
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = fileName;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+      
+      toast.success('Download iniciado!');
+    } catch (error) {
+      toast.error('Erro ao fazer download. Tente novamente.');
+    }
   };
 
   const handleApplyAdjustments = () => {
@@ -193,10 +219,13 @@ export default function HistoryPage() {
                     )}
                     {render.status === "completed" && render.renderedImageUrl && (
                       <div className="space-y-2">
-                        <Button asChild variant="outline" className="w-full border-amber-300 text-amber-900 hover:bg-amber-50">
-                          <a href={render.renderedImageUrl} target="_blank" rel="noopener noreferrer">
-                            Baixar Imagem
-                          </a>
+                        <Button
+                          onClick={() => handleDownload(render.renderedImageUrl!, render)}
+                          variant="outline"
+                          className="w-full border-amber-300 text-amber-900 hover:bg-amber-50"
+                        >
+                          <Download className="h-4 w-4 mr-2" />
+                          {t("history.download")}
                         </Button>
                         <Button
                           onClick={() => {

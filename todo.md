@@ -21,4 +21,8 @@
   - [ ] Cadastro com email e senha
   - [ ] Recuperação de senha
   - [ ] Perfil de usuário editável
+- [x] Download de imagens renderizadas em alta resolução
+  - [x] Botão de download no card de renderização
+  - [x] Download direto do S3
+  - [x] Nome de arquivo descritivo
 
