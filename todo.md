@@ -31,4 +31,14 @@
   - [x] Atualizar traduções PT-BR/EN
   - [x] Atualizar documentação (README, guias)
   - [x] Atualizar nome de arquivos de download
+- [x] Criar guia único de instalação usando App Platform
+  - [x] Consolidar todos os passos em documento sequencial
+  - [x] Incluir setup de GitHub
+  - [x] Incluir setup de banco PostgreSQL (Managed Database)
+  - [x] Incluir setup de Spaces (S3)
+  - [x] Incluir setup de variáveis de ambiente
+  - [x] Incluir setup de Google OAuth
+  - [x] Incluir setup de Stripe
+  - [x] Incluir setup de RapidAPI
+  - [x] Incluir setup de domínio customizado
 
